@@ -3,309 +3,230 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="SquareBerry AI-powered land development pipeline">
-  <meta name="theme-color" content="#2563eb">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://api.mapbox.com https://unpkg.com https://events.mapbox.com; style-src 'self' 'unsafe-inline' https://api.mapbox.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src * blob: data:; connect-src * blob: data:; worker-src blob:; child-src blob:;">
+  <meta name="theme-color" content="#C03030">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="SquareBerry">
-  <title>SquareBerry</title>
-  <link rel="manifest" href="/manifest.json">
-  <link rel="apple-touch-icon" href="/logo-180.png">
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="stylesheet" href="/base.css">
-  <link rel="stylesheet" href="/style.css">
+  <meta name="description" content="SquareBerry — AI-powered land intelligence platform for developers">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./logo-180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./favicon.png">
+  <title>SquareBerry — Land Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="./base.css">
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <div id="app">
-    <aside id="sidebar" class="sidebar" aria-label="Main navigation">
+  <div class="app-shell">
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <a href="#" class="sidebar-logo" data-view="pipeline">
-          <img src="/logo-sidebar.png" alt="SquareBerry" class="logo-img">
-        </a>
-        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
-          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-          </svg>
+        <div class="logo-wrap">
+          <img class="logo-icon" src="./logo-sidebar.png" alt="SquareBerry" width="28" height="28">
+          <span class="logo-text">SquareBerry</span>
+        </div>
+        <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" aria-label="Toggle sidebar">
+          <i data-lucide="panel-left-close" width="18" height="18"></i>
         </button>
       </div>
-      <nav class="sidebar-nav">
-        <button class="nav-item active" data-view="pipeline">
-          <svg class="nav-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-          </svg>
+
+      <nav class="sidebar-nav" role="navigation" aria-label="Main navigation">
+        <a href="#map" class="nav-item active" data-view="map">
+          <i data-lucide="map-pin" width="18" height="18"></i>
+          <span class="nav-label">Map</span>
+        </a>
+        <a href="#pipeline" class="nav-item" data-view="pipeline">
+          <i data-lucide="kanban" width="18" height="18"></i>
           <span class="nav-label">Pipeline</span>
-        </button>
-        <button class="nav-item" data-view="alerts">
-          <svg class="nav-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-          </svg>
+        </a>
+        <a href="#alerts" class="nav-item" data-view="alerts">
+          <i data-lucide="bell" width="18" height="18"></i>
           <span class="nav-label">Alerts</span>
-          <span class="badge" id="alertsBadge" style="display:none"></span>
-        </button>
-        <button class="nav-item" data-view="reports">
-          <svg class="nav-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-          </svg>
+        </a>
+        <a href="#reports" class="nav-item" data-view="reports">
+          <i data-lucide="file-text" width="18" height="18"></i>
           <span class="nav-label">Reports</span>
-        </button>
-        <button class="nav-item" data-view="settings">
-          <svg class="nav-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-          </svg>
+        </a>
+        <a href="#settings" class="nav-item" data-view="settings">
+          <i data-lucide="settings" width="18" height="18"></i>
           <span class="nav-label">Settings</span>
-        </button>
+        </a>
       </nav>
+
       <div class="sidebar-footer">
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-          <svg class="icon-sun" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-          </svg>
-          <svg class="icon-moon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
-          </svg>
-        </button>
+        <div class="user-info">
+          <div class="user-avatar">CH</div>
+          <div class="user-details">
+            <div class="user-name">Canyon Harris</div>
+            <div class="user-role">Pro Plan</div>
+          </div>
+        </div>
       </div>
     </aside>
-    <main id="main" class="main-content">
-      <div id="view-pipeline" class="view active">
-        <header class="view-header">
-          <div class="header-left">
-            <h1 class="view-title">Pipeline</h1>
-            <div class="view-subtitle" id="pipelineSubtitle">Loading...</div>
+
+    <!-- ===== MOBILE BOTTOM NAV ===== -->
+    <nav class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobile navigation">
+      <a href="#map" class="mobile-nav-item active" data-view="map">
+        <i data-lucide="map-pin" width="20" height="20"></i>
+        <span>Map</span>
+      </a>
+      <a href="#pipeline" class="mobile-nav-item" data-view="pipeline">
+        <i data-lucide="kanban" width="20" height="20"></i>
+        <span>Pipeline</span>
+      </a>
+      <a href="#alerts" class="mobile-nav-item" data-view="alerts">
+        <i data-lucide="bell" width="20" height="20"></i>
+        <span>Alerts</span>
+      </a>
+      <a href="#reports" class="mobile-nav-item" data-view="reports">
+        <i data-lucide="file-text" width="20" height="20"></i>
+        <span>Reports</span>
+      </a>
+      <a href="#settings" class="mobile-nav-item" data-view="settings">
+        <i data-lucide="settings" width="20" height="20"></i>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <!-- ===== MAIN AREA ===== -->
+    <div class="main-area">
+      <!-- ===== TOP BAR ===== -->
+      <header class="topbar" id="topbar">
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+          <i data-lucide="menu" width="20" height="20"></i>
+        </button>
+        <div class="search-bar-wrapper">
+          <div class="search-bar">
+            <i data-lucide="search" width="16" height="16"></i>
+            <input type="text" placeholder="Search address, APN, owner, or county..." class="search-input" id="searchInput" autocomplete="off">
+            <kbd class="search-kbd">/</kbd>
           </div>
-          <div class="header-actions">
-            <button class="btn btn-outline" id="exportBtn">
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-              </svg>
-              Export CSV
-            </button>
-            <button class="btn btn-primary" id="addLeadBtn">
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-              </svg>
-              Add Lead
-            </button>
-          </div>
-        </header>
-        <div class="filters-bar">
-          <div class="search-wrapper">
-            <svg class="search-icon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-            </svg>
-            <input type="text" id="searchInput" class="search-input" placeholder="Search leads...">
-          </div>
-          <select id="stageFilter" class="filter-select">
-            <option value="">All Stages</option>
-            <option value="new_lead">New Lead</option>
-            <option value="reviewing">Reviewing</option>
-            <option value="site_visit">Site Visit</option>
-            <option value="offer_sent">Offer Sent</option>
-            <option value="under_contract">Under Contract</option>
-            <option value="closed">Closed</option>
-            <option value="dead">Dead</option>
-          </select>
-          <select id="countyFilter" class="filter-select">
-            <option value="">All Counties</option>
-          </select>
-          <select id="sortSelect" class="filter-select">
-            <option value="created_at">Date Added</option>
-            <option value="asking_price">Price</option>
-            <option value="acreage">Acreage</option>
-            <option value="address">Address</option>
-          </select>
-          <button class="btn btn-ghost btn-sm" id="starredFilterBtn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
-            </svg>
-            Starred
+          <div class="search-results" id="searchResults"></div>
+        </div>
+        <div class="topbar-center" id="layerToggles">
+          <button class="layer-toggle active" data-layer="streets">Street</button>
+          <button class="layer-toggle" data-layer="satellite">Satellite</button>
+          <button class="layer-toggle" data-layer="parcels">Parcels</button>
+          <button class="layer-toggle" data-layer="flood">Flood</button>
+          <button class="layer-toggle" data-layer="wetlands">Wetlands</button>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" aria-label="Notifications" title="Notifications">
+            <i data-lucide="bell" width="18" height="18"></i>
+            <span class="notification-dot"></span>
           </button>
+          <button class="icon-btn" data-theme-toggle aria-label="Toggle dark mode" title="Toggle theme">
+            <i data-lucide="moon" width="18" height="18"></i>
+          </button>
+          <div class="topbar-avatar" title="Canyon Harris">CH</div>
         </div>
-        <div class="stage-tabs" id="stageTabs" role="tablist">
-          <button class="stage-tab active" data-stage="" role="tab" aria-selected="true">All</button>
-          <button class="stage-tab" data-stage="new_lead" role="tab">New Lead</button>
-          <button class="stage-tab" data-stage="reviewing" role="tab">Reviewing</button>
-          <button class="stage-tab" data-stage="site_visit" role="tab">Site Visit</button>
-          <button class="stage-tab" data-stage="offer_sent" role="tab">Offer Sent</button>
-          <button class="stage-tab" data-stage="under_contract" role="tab">Under Contract</button>
-          <button class="stage-tab" data-stage="closed" role="tab">Closed</button>
-          <button class="stage-tab" data-stage="dead" role="tab">Dead</button>
-        </div>
-        <div class="table-container">
-          <table class="leads-table" id="leadsTable">
-            <thead>
-              <tr>
-                <th class="col-star"></th>
-                <th class="col-address" data-sort="address">Address</th>
-                <th class="col-county" data-sort="county">County</th>
-                <th class="col-acres" data-sort="acreage">Acres</th>
-                <th class="col-price" data-sort="asking_price">Price</th>
-                <th class="col-ppa">$/Acre</th>
-                <th class="col-zoning">Zoning</th>
-                <th class="col-rating">Rating</th>
-                <th class="col-stage">Stage</th>
-                <th class="col-actions"></th>
-              </tr>
-            </thead>
-            <tbody id="leadsBody">
-              <tr class="loading-row">
-                <td colspan="10" class="text-center">Loading leads...</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      </header>
+
+      <!-- ===== MAP STATS ===== -->
+      <div class="map-stats" id="mapStats">
+        <!-- Injected by JS -->
       </div>
-      <div id="view-alerts" class="view">
-        <header class="view-header">
-          <div class="header-left">
-            <h1 class="view-title">Alerts</h1>
-            <div class="view-subtitle">Get notified when new leads match your criteria</div>
+
+      <!-- ===== MAP VIEW ===== -->
+      <div class="view-content active" id="view-map">
+        <div id="map" class="map-container"></div>
+
+        <!-- Analysis Panel -->
+        <div class="analysis-panel" id="analysisPanel">
+          <div class="analysis-panel-header">
+            <div class="analysis-panel-title-section">
+              <h2 class="analysis-panel-address" id="panelAddress">—</h2>
+              <p class="analysis-panel-apn" id="panelAPN">—</p>
+              <div class="analysis-panel-badges">
+                <span class="badge badge-neutral" id="panelAcreage">—</span>
+                <span class="badge badge-neutral" id="panelZoning">—</span>
+                <span class="badge badge-primary" id="panelPrice">—</span>
+                <span class="badge badge-success" id="panelPipeline" style="display:none;">—</span>
+              </div>
+            </div>
+            <div class="analysis-panel-actions">
+              <button class="btn btn-primary btn-sm" id="generateReportBtn" onclick="generateReport()">
+                <i data-lucide="file-text" width="14" height="14"></i>
+                Generate Report
+              </button>
+              <button class="btn btn-secondary btn-sm" id="addToPipelineBtn" onclick="addToPipeline(selectedParcelId)" style="display:none;">
+                <i data-lucide="plus" width="14" height="14"></i>
+                Add to Pipeline
+              </button>
+              <button class="icon-btn" id="closePanelBtn" aria-label="Close panel" title="Close">
+                <i data-lucide="x" width="18" height="18"></i>
+              </button>
+            </div>
           </div>
-          <div class="header-actions">
-            <button class="btn btn-primary" id="newAlertBtn">
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-              </svg>
-              New Alert
+
+          <div class="analysis-tabs">
+            <button class="analysis-tab active" data-tab="overview">Overview</button>
+            <button class="analysis-tab" data-tab="zoning">Zoning</button>
+            <button class="analysis-tab" data-tab="feasibility">Feasibility</button>
+            <button class="analysis-tab" data-tab="environment">Environment</button>
+            <button class="analysis-tab" data-tab="ai-chat">
+              <i data-lucide="bot" width="13" height="13" style="display:inline;vertical-align:-2px;margin-right:3px;"></i>AI
             </button>
           </div>
-        </header>
-        <div class="alerts-grid" id="alertsGrid"></div>
-      </div>
-      <div id="view-reports" class="view">
-        <header class="view-header">
-          <div class="header-left">
-            <h1 class="view-title">Reports</h1>
-            <div class="view-subtitle">Development analysis reports</div>
+
+          <div class="analysis-tab-content" id="analysisTabContent">
+            <!-- Tab content injected by JS -->
           </div>
-          <div class="header-actions">
-            <button class="btn btn-primary" id="newReportBtn">
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-              </svg>
-              New Report
-            </button>
-          </div>
-        </header>
-        <div class="reports-grid" id="reportsGrid"></div>
+        </div>
       </div>
-      <div id="view-settings" class="view">
-        <header class="view-header">
-          <div class="header-left">
-            <h1 class="view-title">Settings</h1>
-            <div class="view-subtitle">Configure your pipeline preferences</div>
-          </div>
-        </header>
-        <div class="settings-container" id="settingsContainer"></div>
+
+      <!-- ===== PIPELINE VIEW ===== -->
+      <div class="view-content" id="view-pipeline">
+        <div class="page-header">
+          <h1 class="page-title">Pipeline</h1>
+          <p class="page-subtitle">Track your deals from lead to close</p>
+        </div>
+        <div class="kanban-board" id="kanbanBoard">
+          <!-- Injected by JS -->
+        </div>
       </div>
-    </main>
-  </div>
-  <div id="leadModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="leadModalTitle" style="display:none">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 class="modal-title" id="leadModalTitle">Lead Details</h2>
-        <button class="modal-close" id="leadModalClose" aria-label="Close">&times;</button>
+
+      <!-- ===== ALERTS VIEW ===== -->
+      <div class="view-content" id="view-alerts">
+        <div class="page-header">
+          <h1 class="page-title">Saved Alerts</h1>
+          <p class="page-subtitle">Get notified when new parcels match your criteria</p>
+        </div>
+        <div class="alerts-list" id="alertsList">
+          <!-- Injected by JS -->
+        </div>
       </div>
-      <div class="modal-body" id="leadModalBody"></div>
-    </div>
-  </div>
-  <div id="alertModal" class="modal-overlay" role="dialog" aria-modal="true" style="display:none">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 class="modal-title">New Alert</h2>
-        <button class="modal-close" id="alertModalClose" aria-label="Close">&times;</button>
+
+      <!-- ===== REPORTS VIEW ===== -->
+      <div class="view-content" id="view-reports">
+        <div class="page-header">
+          <h1 class="page-title">Reports</h1>
+          <p class="page-subtitle">Generated analysis reports</p>
+        </div>
+        <div class="reports-list" id="reportsList">
+          <!-- Injected by JS -->
+        </div>
       </div>
-      <div class="modal-body">
-        <form id="alertForm" class="form">
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">County (optional)</label>
-              <input type="text" name="county" class="form-input" placeholder="e.g. Kent">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Min Acreage</label>
-              <input type="number" name="min_acreage" class="form-input" placeholder="e.g. 5" step="0.1" min="0">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Max Acreage</label>
-              <input type="number" name="max_acreage" class="form-input" placeholder="e.g. 50" step="0.1" min="0">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Max Price ($)</label>
-              <input type="number" name="max_price" class="form-input" placeholder="e.g. 500000" min="0">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Zoning Filter</label>
-              <select name="zoning_filter" class="form-select">
-                <option value="">Any Residential</option>
-                <option value="R-1 Only">R-1 Only</option>
-                <option value="R-2 Only">R-2 Only</option>
-                <option value="R-3 Only">R-3 Only</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-actions">
-            <button type="button" class="btn btn-ghost" id="alertModalCancel">Cancel</button>
-            <button type="submit" class="btn btn-primary">Create Alert</button>
-          </div>
-        </form>
+
+      <!-- ===== SETTINGS VIEW ===== -->
+      <div class="view-content" id="view-settings">
+        <div class="page-header">
+          <h1 class="page-title">Settings</h1>
+          <p class="page-subtitle">Configure your workspace</p>
+        </div>
+        <div class="settings-container" id="settingsContainer">
+          <!-- Injected by JS -->
+        </div>
       </div>
     </div>
   </div>
-  <div id="reportModal" class="modal-overlay" role="dialog" aria-modal="true" style="display:none">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 class="modal-title">New Report</h2>
-        <button class="modal-close" id="reportModalClose" aria-label="Close">&times;</button>
-      </div>
-      <div class="modal-body">
-        <form id="reportForm" class="form">
-          <div class="form-group">
-            <label class="form-label">Report Title *</label>
-            <input type="text" name="title" class="form-input" required placeholder="e.g. 123 Main St Development Analysis">
-          </div>
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">Address</label>
-              <input type="text" name="address" class="form-input" placeholder="Property address">
-            </div>
-            <div class="form-group">
-              <label class="form-label">County</label>
-              <input type="text" name="county" class="form-input" placeholder="e.g. Kent">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Acreage</label>
-              <input type="number" name="acreage" class="form-input" step="0.01" min="0">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Feasibility Rating</label>
-              <select name="feasibility_rating" class="form-select">
-                <option value="">Select...</option>
-                <option value="A">A Excellent</option>
-                <option value="B">B Good</option>
-                <option value="C">C Fair</option>
-                <option value="D">D Poor</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">PDF URL</label>
-              <input type="url" name="pdf_url" class="form-input" placeholder="https://...">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Listing URL</label>
-              <input type="url" name="listing_url" class="form-input" placeholder="https://...">
-            </div>
-          </div>
-          <div class="form-actions">
-            <button type="button" class="btn btn-ghost" id="reportModalCancel">Cancel</button>
-            <button type="submit" class="btn btn-primary">Save Report</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-  <div id="toast" class="toast" role="alert" aria-live="polite" style="display:none"></div>
-  <script src="/app.js"></script>
+
+  <script src="./app.js"></script>
 </body>
 </html>
