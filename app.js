@@ -1,1 +1,28 @@
-LyogPT09PT0gU3F1YXJlQmVycnkgQXBwIOKAlCBNYWluIEphdmFTY3JpcHQgPT09PT0gKi8KCi8vID09PT09PT09PT09PT09PT09PT09IFNFQ1VSSVRZIFVUSUxJVElFUyA9PT09PT09PT09PT09PT09PT09PQoKLyoqCiAqIEVzY2FwZSBIVE1MIHRvIHByZXZlbnQgWFNTIGluIHRlbXBsYXRlIGxpdGVyYWxzCiAqLwpmdW5jdGlvbiBlc2NhcGVIdG1sKHN0cikgewogIGlmIChzdHIgPT09IG51bGwgfHwgc3RyID09PSB1bmRlZmluZWQpIHJldHVybiAnJzsKICBjb25zdCBzID0gU3RyaW5nKHN0cik7CiAgY29uc3QgbWFwID0geyAnJic6ICcmYW1wOycsICc8JzogJyZsdDsnLCAnPic6ICcmZ3Q7JywgJyInOiAnJnF1b3Q7JywgIiciOiAnJiMwMzk7JyB9OwogIHJldHVybiBzLnJlcGxhY2UoL1smPD4iJ10vZywgYyA9PiBtYXBbY10pOwp9CgovKioKICogU2FuaXRpemUgdXNlciBpbnB1dCDigJQgc3RyaXAgdGFncyBhbmQgbGltaXQgbGVuZ3RoCiAqLwpmdW5jdGlvbiBzYW5pdGl6ZUlucHV0KHN0ciwgbWF4TGVuID0gNTAwKSB7CiAgaWYgKCFzdHIpIHJldHVybiAnJzsKICByZXR1cm4gU3RyaW5nKHN0cikucmVwbGFjZSgvPFtePl0qPi9nLCAnJykudHJpbSgpLnNsaWNlKDAsIG1heExlbik7Cn0KCg==
+/* ===== SquareBerry App — Main JavaScript ===== */
+
+// ==================== SECURITY UTILITIES ====================
+
+/**
+ * Escape HTML to prevent XSS in template literals
+ */
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  const s = String(str);
+  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+  return s.replace(/[&<>"']/g, c => map[c]);
+}
+
+/**
+ * Sanitize user input — strip tags and limit length
+ */
+function sanitizeInput(str, maxLen = 500) {
+  if (!str) return '';
+  return String(str).replace(/<[^>]*>/g, '').trim().slice(0, maxLen);
+}
+
+// ==================== DATA ====================
+
+// ==================== PARTIAL FILE — PART 1 OF 3 ====================
+// This is a staged commit. Full file will be in the next commit.
+
+const SQUAREBERRY_BUILD = 'part1-staging';
