@@ -20,9 +20,4 @@ function sanitizeInput(str, maxLen = 500) {
   return String(str).replace(/<[^>]*>/g, '').trim().slice(0, maxLen);
 }
 
-// ==================== DATA ====================
-
-// ==================== PARTIAL FILE — PART 1 OF 3 ====================
-// This is a staged commit. Full file will be in the next commit.
-
-const SQUAREBERRY_BUILD = 'part1-staging';
+TEST_TRUNCATION_CHECK
