@@ -1,21 +1,24 @@
 {
-  "name": "SquareBerry",
+  "name": "SquareBerry — Land Intelligence",
   "short_name": "SquareBerry",
-  "description": "AI-powered land development pipeline for Michigan",
-  "start_url": "/",
+  "description": "AI-powered land intelligence platform for developers",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#2563eb",
+  "background_color": "#FAFAF6",
+  "theme_color": "#C03030",
+  "orientation": "any",
   "icons": [
     {
-      "src": "/logo-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
+      "src": "./logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "/logo-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "./logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
