@@ -119,6 +119,13 @@ async def lifespan(app):
         _local.db.close()
 
 app = FastAPI(title="SquareBerry Pipeline API v2", lifespan=lifespan)
+@app.get("/api/health")
+async def health():
+    return {"status": "healthy"}
+
+@app.get("/")
+async def root():
+    return {"status": "ok"}
 
 # CORS — allow deployed sites and localhost for development
 ALLOWED_ORIGINS = [
