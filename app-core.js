@@ -1597,7 +1597,7 @@ function renderAIChat(p) {
       </div>
       <div class="ai-chat-suggestions" id="chatSuggestions">
         <button class="chat-suggestion" onclick="sendChatQuestion('How many lots can I get?')">How many lots?</button>
-        <button class="chat-suggestion" onclick="sendChatQuestion('What\'s the wetland risk?')">Wetland risk?</button>
+        <button class="chat-suggestion" onclick="sendChatQuestion('What\\'s the wetland risk?')">Wetland risk?</button>
         <button class="chat-suggestion" onclick="sendChatQuestion('Does this pencil at 25%?')">Pencil at 25%?</button>
         <button class="chat-suggestion" onclick="sendChatQuestion('What are the setbacks?')">Setbacks?</button>
       </div>
@@ -1755,4 +1755,5 @@ function generateAnswer(p, q) {
   // Fallback
   return `I'll need more data to answer that specifically — this will be available when we connect real parcel APIs. In the meantime, try asking about: lot yield, wetlands, flood risk, setbacks, zoning, feasibility, owner info, comps, or soil type.`;
 }
+
 
