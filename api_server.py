@@ -122,6 +122,8 @@ app = FastAPI(title="SquareBerry Pipeline API v2", lifespan=lifespan)
 
 # CORS — allow deployed sites and localhost for development
 ALLOWED_ORIGINS = [
+    "https://squareberry.app",
+    "https://www.squareberry.app",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "http://localhost:3000",

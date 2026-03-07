@@ -666,6 +666,41 @@ function initSidebar() {
       }
     });
   }
+
+  // Mobile hamburger menu — toggle sidebar as overlay
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const sidebar = document.getElementById('sidebar');
+  if (mobileMenuBtn && sidebar) {
+    // Create backdrop overlay element
+    const overlay = document.createElement('div');
+    overlay.className = 'mobile-sidebar-overlay';
+    document.body.appendChild(overlay);
+
+    const openMobileSidebar = () => {
+      sidebar.classList.add('mobile-open');
+      overlay.classList.add('active');
+    };
+    const closeMobileSidebar = () => {
+      sidebar.classList.remove('mobile-open');
+      overlay.classList.remove('active');
+    };
+
+    mobileMenuBtn.addEventListener('click', () => {
+      if (sidebar.classList.contains('mobile-open')) {
+        closeMobileSidebar();
+      } else {
+        openMobileSidebar();
+      }
+    });
+    overlay.addEventListener('click', closeMobileSidebar);
+
+    // Close sidebar when clicking a nav item on mobile
+    sidebar.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        if (window.innerWidth <= 768) closeMobileSidebar();
+      });
+    });
+  }
 }
 
 
@@ -1044,7 +1079,7 @@ function renderMapStats() {
 
 // ==================== ANALYSIS PANEL ====================
 
-function selectParcel(id) {
+async function selectParcel(id) {
   const parcel = PARCELS.find(p => p.id === id);
   if (!parcel) return;
 
@@ -1102,6 +1137,13 @@ function selectParcel(id) {
     t.classList.toggle('active', t.dataset.tab === 'overview');
   });
 
+  // Show loading state briefly while "assembling" data
+  const tabContent = document.getElementById('analysisTabContent');
+  tabContent.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:var(--space-8);gap:var(--space-3);text-align:center;">
+    <div class="map-loading-spinner"></div>
+    <div style="font-size:var(--text-sm);color:var(--color-text-muted);line-height:1.5;">Assembling parcel data from Regrid + Zoneomics + FEMA…<br>Running AI feasibility analysis… (10–20 seconds)</div>
+  </div>`;
+  await new Promise(r => setTimeout(r, 800));
   renderTabContent(parcel, 'overview');
 
   const panel = document.getElementById('analysisPanel');
