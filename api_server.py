@@ -190,12 +190,19 @@ async def rate_limit_middleware(request: Request, call_next):
 
 
 # ── Config endpoint (serves non-secret client config) ──
+# ──────────────────────────────────────────────────────
+# TOKENS — Set these as environment variables in Railway:
+#   NEXT_PUBLIC_MAPBOX_TOKEN = your Mapbox public token (pk.ey...)
+#   REGRID_API_KEY           = your Regrid API key
+# These are read from os.environ and served to the frontend.
+# Never hardcode tokens here — always use environment variables.
+# ──────────────────────────────────────────────────────
 @app.get("/api/config")
 async def get_config():
-    """Serve client-side configuration like the Mapbox token."""
+    """Serve client-side configuration — Mapbox and Regrid tokens from env vars."""
     return {
-        "mapbox_token": os.environ.get("MAPBOX_TOKEN", ""),
-        "regrid_token": os.environ.get("REGRID_TOKEN", "")
+        "mapbox_token": os.environ.get("NEXT_PUBLIC_MAPBOX_TOKEN", ""),
+        "regrid_token": os.environ.get("REGRID_API_KEY", "")
     }
 
 

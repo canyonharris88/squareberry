@@ -23,368 +23,10 @@ function sanitizeInput(str, maxLen = 500) {
 
 // ==================== DATA ====================
 
-const PARCELS = [
-  {
-    id: 1,
-    address: "10250 Silver Lake Rd, Green Oak Twp",
-    apn: "4711-12-200-035",
-    acreage: 40,
-    owner: "Robert & Linda Thompson",
-    ownerAddress: "10250 Silver Lake Rd, Brighton, MI 48116",
-    landValue: 320000,
-    improvementValue: 0,
-    totalValue: 320000,
-    askingPrice: 380000,
-    lastSaleDate: "08/15/2019",
-    lastSalePrice: 285000,
-    zoning: "R-1",
-    zoningFull: "R-1 Single Family Residential",
-    township: "Green Oak",
-    county: "Livingston",
-    schoolDistrict: "Brighton Area Schools",
-    minLotSize: "1.5 acres",
-    minFrontage: "200 ft",
-    maxHeight: "35 ft",
-    frontSetback: "50 ft",
-    sideSetback: "20 ft",
-    rearSetback: "50 ft",
-    maxCoverage: "25%",
-    permittedUses: ["Single-family dwellings", "Home occupations", "Agricultural uses", "Parks & recreation"],
-    conditionalUses: ["Churches", "Schools", "Public utility buildings", "Bed & breakfast"],
-    suitableForDev: true,
-    lotYield: 12,
-    avgConstructionCost: 35000,
-    avgFinishedLotPrice: 95000,
-    floodZone: "Zone X",
-    floodRisk: "Minimal Risk",
-    wetlands: "None detected",
-    wetlandsAcres: 0,
-    topography: "Generally flat with gentle roll",
-    soilType: "Spinks-Boyer sandy loam",
-    coords: [-83.755, 42.510],
-    polygon: [[-83.762, 42.514], [-83.748, 42.514], [-83.748, 42.506], [-83.762, 42.506], [-83.762, 42.514]],
-    pipeline: "researching",
-    pipelineDays: 12,
-    estimatedBuildCost: 385000,
-    estimatedHomeValue: 575000,
-    comparableHomeSales: [540000, 585000, 610000]
-  },
-  {
-    id: 2,
-    address: "3890 Crooked Lake Rd, Genoa Twp",
-    apn: "4711-08-300-018",
-    acreage: 20,
-    owner: "Genoa Land Holdings LLC",
-    ownerAddress: "PO Box 445, Howell, MI 48844",
-    landValue: 180000,
-    improvementValue: 0,
-    totalValue: 180000,
-    askingPrice: 220000,
-    lastSaleDate: "03/22/2021",
-    lastSalePrice: 210000,
-    zoning: "R-2",
-    zoningFull: "R-2 Two-Family Residential",
-    township: "Genoa",
-    county: "Livingston",
-    schoolDistrict: "Howell Public Schools",
-    minLotSize: "0.75 acres",
-    minFrontage: "150 ft",
-    maxHeight: "35 ft",
-    frontSetback: "40 ft",
-    sideSetback: "15 ft",
-    rearSetback: "40 ft",
-    maxCoverage: "30%",
-    permittedUses: ["Single-family dwellings", "Two-family dwellings", "Home occupations", "Parks"],
-    conditionalUses: ["Multi-family (up to 4 units)", "Day care centers", "Community buildings"],
-    suitableForDev: true,
-    lotYield: 16,
-    avgConstructionCost: 32000,
-    avgFinishedLotPrice: 82000,
-    floodZone: "Zone X",
-    floodRisk: "Minimal Risk",
-    wetlands: "Wetlands present",
-    wetlandsAcres: 2.3,
-    topography: "Moderate slope (5-8%)",
-    soilType: "Miami-Conover loam",
-    coords: [-83.720, 42.555],
-    polygon: [[-83.727, 42.559], [-83.713, 42.559], [-83.713, 42.551], [-83.727, 42.551], [-83.727, 42.559]],
-    pipeline: "lead",
-    pipelineDays: 3,
-    estimatedBuildCost: 340000,
-    estimatedHomeValue: 485000,
-    comparableHomeSales: [465000, 490000, 510000]
-  },
-  {
-    id: 3,
-    address: "7650 Hamburg Rd, Hamburg Twp",
-    apn: "4711-15-100-022",
-    acreage: 15,
-    owner: "Patricia Nowak Trust",
-    ownerAddress: "7650 Hamburg Rd, Hamburg, MI 48139",
-    landValue: 145000,
-    improvementValue: 45000,
-    totalValue: 190000,
-    askingPrice: 225000,
-    lastSaleDate: "11/05/2017",
-    lastSalePrice: 160000,
-    zoning: "R-1",
-    zoningFull: "R-1 Single Family Residential",
-    township: "Hamburg",
-    county: "Livingston",
-    schoolDistrict: "Pinckney Community Schools",
-    minLotSize: "1.0 acres",
-    minFrontage: "165 ft",
-    maxHeight: "35 ft",
-    frontSetback: "45 ft",
-    sideSetback: "15 ft",
-    rearSetback: "45 ft",
-    maxCoverage: "25%",
-    permittedUses: ["Single-family dwellings", "Home occupations", "Agricultural uses"],
-    conditionalUses: ["Churches", "Public buildings", "Private clubs"],
-    suitableForDev: true,
-    lotYield: 8,
-    avgConstructionCost: 42000,
-    avgFinishedLotPrice: 78000,
-    floodZone: "Zone AE",
-    floodRisk: "High Risk",
-    wetlands: "Wetlands present",
-    wetlandsAcres: 1.8,
-    topography: "Moderate slope near creek (8-12%)",
-    soilType: "Blount-Pewamo clay loam",
-    coords: [-83.810, 42.450],
-    polygon: [[-83.816, 42.454], [-83.804, 42.454], [-83.804, 42.446], [-83.816, 42.446], [-83.816, 42.454]],
-    pipeline: null,
-    pipelineDays: 0,
-    estimatedBuildCost: 410000,
-    estimatedHomeValue: 520000,
-    comparableHomeSales: [495000, 530000, 545000]
-  },
-  {
-    id: 4,
-    address: "2100 Coon Lake Rd, Marion Twp",
-    apn: "4711-20-400-009",
-    acreage: 60,
-    owner: "Livingston Farms Inc",
-    ownerAddress: "2100 Coon Lake Rd, Howell, MI 48843",
-    landValue: 420000,
-    improvementValue: 85000,
-    totalValue: 505000,
-    askingPrice: 695000,
-    lastSaleDate: "06/10/2016",
-    lastSalePrice: 380000,
-    zoning: "AG",
-    zoningFull: "AG Agricultural",
-    township: "Marion",
-    county: "Livingston",
-    schoolDistrict: "Howell Public Schools",
-    minLotSize: "5.0 acres",
-    minFrontage: "330 ft",
-    maxHeight: "35 ft",
-    frontSetback: "60 ft",
-    sideSetback: "25 ft",
-    rearSetback: "50 ft",
-    maxCoverage: "15%",
-    permittedUses: ["Agricultural operations", "Single-family dwellings", "Farm stands"],
-    conditionalUses: ["PUD development", "Agri-tourism", "Mining & extraction"],
-    suitableForDev: false,
-    lotYield: 6,
-    avgConstructionCost: 55000,
-    avgFinishedLotPrice: 95000,
-    floodZone: "Zone X",
-    floodRisk: "Minimal Risk",
-    wetlands: "None detected",
-    wetlandsAcres: 0,
-    topography: "Generally flat",
-    soilType: "Capac-Brookston loam",
-    coords: [-83.885, 42.578],
-    polygon: [[-83.898, 42.586], [-83.872, 42.586], [-83.872, 42.570], [-83.898, 42.570], [-83.898, 42.586]],
-    pipeline: "due-diligence",
-    pipelineDays: 28,
-    estimatedBuildCost: 450000,
-    estimatedHomeValue: 620000,
-    comparableHomeSales: [590000, 635000, 660000]
-  },
-  {
-    id: 5,
-    address: "3200 Resort Pike Rd, near Petoskey",
-    apn: "0115-028-001-00",
-    acreage: 80,
-    owner: "Northern Michigan Land Co",
-    ownerAddress: "411 E Mitchell St, Petoskey, MI 49770",
-    landValue: 640000,
-    improvementValue: 0,
-    totalValue: 640000,
-    askingPrice: 880000,
-    lastSaleDate: "09/28/2020",
-    lastSalePrice: 550000,
-    zoning: "R-1",
-    zoningFull: "R-1 Single Family Residential",
-    township: "Resort",
-    county: "Emmet",
-    schoolDistrict: "Petoskey Public Schools",
-    minLotSize: "2.0 acres",
-    minFrontage: "200 ft",
-    maxHeight: "35 ft",
-    frontSetback: "50 ft",
-    sideSetback: "20 ft",
-    rearSetback: "50 ft",
-    maxCoverage: "20%",
-    permittedUses: ["Single-family dwellings", "Home occupations", "Agricultural uses"],
-    conditionalUses: ["Vacation rentals", "Golf courses", "Public utilities"],
-    suitableForDev: true,
-    lotYield: 20,
-    avgConstructionCost: 52000,
-    avgFinishedLotPrice: 110000,
-    floodZone: "Zone X",
-    floodRisk: "Minimal Risk",
-    wetlands: "Wetlands present",
-    wetlandsAcres: 5.2,
-    topography: "Rolling terrain with scenic views",
-    soilType: "Emmet-Leelanau sandy loam",
-    coords: [-84.945, 45.385],
-    polygon: [[-84.960, 45.395], [-84.930, 45.395], [-84.930, 45.375], [-84.960, 45.375], [-84.960, 45.395]],
-    pipeline: null,
-    pipelineDays: 0,
-    estimatedBuildCost: 520000,
-    estimatedHomeValue: 780000,
-    comparableHomeSales: [735000, 790000, 825000]
-  },
-  {
-    id: 6,
-    address: "8800 Supply Rd, near Traverse City",
-    apn: "2801-014-030-00",
-    acreage: 35,
-    owner: "Grand Traverse Holdings LLC",
-    ownerAddress: "225 E Front St, Traverse City, MI 49684",
-    landValue: 280000,
-    improvementValue: 0,
-    totalValue: 280000,
-    askingPrice: 395000,
-    lastSaleDate: "01/14/2022",
-    lastSalePrice: 340000,
-    zoning: "PUD",
-    zoningFull: "PUD Planned Unit Development",
-    township: "Garfield",
-    county: "Grand Traverse",
-    schoolDistrict: "Traverse City Area Public Schools",
-    minLotSize: "Per plan approval",
-    minFrontage: "Per plan approval",
-    maxHeight: "40 ft",
-    frontSetback: "30 ft",
-    sideSetback: "10 ft",
-    rearSetback: "30 ft",
-    maxCoverage: "40%",
-    permittedUses: ["Mixed residential (per plan)", "Common open space", "Community facilities"],
-    conditionalUses: ["Commercial (per plan)", "Multi-family", "Assisted living"],
-    suitableForDev: true,
-    lotYield: 28,
-    avgConstructionCost: 48000,
-    avgFinishedLotPrice: 92000,
-    floodZone: "Zone X",
-    floodRisk: "Minimal Risk",
-    wetlands: "None detected",
-    wetlandsAcres: 0,
-    topography: "Gentle slope (2-5%)",
-    soilType: "Kalkaska-Rubicon sand",
-    coords: [-85.595, 44.765],
-    polygon: [[-85.605, 44.772], [-85.585, 44.772], [-85.585, 44.758], [-85.605, 44.758], [-85.605, 44.772]],
-    pipeline: null,
-    pipelineDays: 0,
-    estimatedBuildCost: 390000,
-    estimatedHomeValue: 560000,
-    comparableHomeSales: [530000, 570000, 595000]
-  },
-  {
-    id: 7,
-    address: "5500 Hartland Rd, Hartland Twp",
-    apn: "4711-05-200-041",
-    acreage: 25,
-    owner: "James & Diane Kowalski",
-    ownerAddress: "5500 Hartland Rd, Hartland, MI 48353",
-    landValue: 215000,
-    improvementValue: 55000,
-    totalValue: 270000,
-    askingPrice: 280000,
-    lastSaleDate: "04/03/2018",
-    lastSalePrice: 230000,
-    zoning: "R-2",
-    zoningFull: "R-2 Two-Family Residential",
-    township: "Hartland",
-    county: "Livingston",
-    schoolDistrict: "Hartland Consolidated Schools",
-    minLotSize: "0.75 acres",
-    minFrontage: "150 ft",
-    maxHeight: "35 ft",
-    frontSetback: "40 ft",
-    sideSetback: "15 ft",
-    rearSetback: "40 ft",
-    maxCoverage: "30%",
-    permittedUses: ["Single-family dwellings", "Two-family dwellings", "Home occupations"],
-    conditionalUses: ["Multi-family (up to 4)", "Child care facilities", "Religious institutions"],
-    suitableForDev: true,
-    lotYield: 18,
-    avgConstructionCost: 32000,
-    avgFinishedLotPrice: 88000,
-    floodZone: "Zone X",
-    floodRisk: "Minimal Risk",
-    wetlands: "None detected",
-    wetlandsAcres: 0,
-    topography: "Generally flat",
-    soilType: "Boyer-Oshtemo sandy loam",
-    coords: [-83.754, 42.635],
-    polygon: [[-83.762, 42.640], [-83.746, 42.640], [-83.746, 42.630], [-83.762, 42.630], [-83.762, 42.640]],
-    pipeline: "under-contract",
-    pipelineDays: 7,
-    estimatedBuildCost: 350000,
-    estimatedHomeValue: 495000,
-    comparableHomeSales: [475000, 500000, 520000]
-  },
-  {
-    id: 8,
-    address: "1200 Kensington Rd, Brighton Twp",
-    apn: "4711-03-100-055",
-    acreage: 10,
-    owner: "Brighton Development Group",
-    ownerAddress: "301 W Main St, Brighton, MI 48116",
-    landValue: 160000,
-    improvementValue: 0,
-    totalValue: 160000,
-    askingPrice: 145000,
-    lastSaleDate: "07/20/2023",
-    lastSalePrice: 175000,
-    zoning: "R-1",
-    zoningFull: "R-1 Single Family Residential",
-    township: "Brighton",
-    county: "Livingston",
-    schoolDistrict: "Brighton Area Schools",
-    minLotSize: "1.0 acres",
-    minFrontage: "165 ft",
-    maxHeight: "35 ft",
-    frontSetback: "45 ft",
-    sideSetback: "15 ft",
-    rearSetback: "45 ft",
-    maxCoverage: "25%",
-    permittedUses: ["Single-family dwellings", "Home occupations", "Parks"],
-    conditionalUses: ["Churches", "Public utilities", "Schools"],
-    suitableForDev: true,
-    lotYield: 6,
-    avgConstructionCost: 35000,
-    avgFinishedLotPrice: 82000,
-    floodZone: "Zone X",
-    floodRisk: "Minimal Risk",
-    wetlands: "None detected",
-    wetlandsAcres: 0,
-    topography: "Generally flat",
-    soilType: "Fox sandy loam",
-    coords: [-83.782, 42.537],
-    polygon: [[-83.788, 42.541], [-83.776, 42.541], [-83.776, 42.533], [-83.788, 42.533], [-83.788, 42.541]],
-    pipeline: null,
-    pipelineDays: 0,
-    estimatedBuildCost: 365000,
-    estimatedHomeValue: 510000,
-    comparableHomeSales: [485000, 515000, 535000]
-  }
-];
+// PARCELS array — no longer contains hardcoded mock data.
+// All parcel data now comes from Regrid MVT vector tiles (real-time)
+// and the pipeline API leads (from /api/leads database).
+const PARCELS = [];
 
 const PIPELINE_STAGES = [
   { id: "new_lead", label: "New Lead" },
@@ -560,16 +202,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   initRouter();
   initSidebar();
 
-  // Public Mapbox token (pk.* tokens are designed for client-side use)
-  const MAPBOX_PK = ['pk.eyJ1IjoiY2FueW9uaGFycmlz', 'ODgiLCJhIjoiY21taHBydDVjMH', 'c5djJvb3Byb3c1bjZibiJ9.N9', 'Ktct4i9dw8ksqyz8mmsg'].join('');
-
-  // Load config from server (allows env var override)
+  // ──────────────────────────────────────────────────────
+  // TOKEN LOADING — tokens come from Railway environment variables
+  // Set these in Railway dashboard → Variables:
+  //   NEXT_PUBLIC_MAPBOX_TOKEN = your Mapbox public token (pk.ey...)
+  //   REGRID_API_KEY           = your Regrid API key
+  // The /api/config endpoint reads them from os.environ and serves them here.
+  // ──────────────────────────────────────────────────────
   try {
     const cfg = await fetch('/api/config').then(r => r.json());
-    window.MAPBOX_TOKEN = cfg.mapbox_token || MAPBOX_PK;
+    window.MAPBOX_TOKEN = cfg.mapbox_token || '';
     window.REGRID_TOKEN = cfg.regrid_token || '';
   } catch (e) {
-    window.MAPBOX_TOKEN = MAPBOX_PK;
+    console.warn('Could not load config from server — tokens not available');
+    window.MAPBOX_TOKEN = '';
     window.REGRID_TOKEN = '';
   }
 
@@ -723,19 +369,20 @@ function initSearch() {
       return;
     }
 
-    searchResults = PARCELS.filter(p =>
-      p.address.toLowerCase().includes(query) ||
-      p.apn.toLowerCase().includes(query) ||
-      p.owner.toLowerCase().includes(query) ||
-      p.county.toLowerCase().includes(query) ||
-      p.township.toLowerCase().includes(query)
+    // Search pipeline leads from the API (real data)
+    const leadResults = apiLeads.filter(l =>
+      (l.address && l.address.toLowerCase().includes(query)) ||
+      (l.county && l.county.toLowerCase().includes(query)) ||
+      (l.city && l.city.toLowerCase().includes(query)) ||
+      (l.zoning && l.zoning.toLowerCase().includes(query))
     );
+    searchResults = leadResults;
 
     if (searchResults.length > 0) {
-      container.innerHTML = searchResults.map(p => `
-        <button class="search-result-item" onclick="selectParcelFromSearch(${parseInt(p.id)})">
-          <div class="search-result-address">${highlightMatch(escapeHtml(p.address), query)}</div>
-          <div class="search-result-meta">${escapeHtml(String(p.acreage))} acres · ${escapeHtml(p.county)} County · ${escapeHtml(p.zoning)}</div>
+      container.innerHTML = searchResults.map(l => `
+        <button class="search-result-item" onclick="selectParcelFromSearch(${parseInt(l.id)})">
+          <div class="search-result-address">${highlightMatch(escapeHtml(l.address + (l.city ? ', ' + l.city : '')), query)}</div>
+          <div class="search-result-meta">${l.acreage ? escapeHtml(String(l.acreage)) + ' acres · ' : ''}${l.county ? escapeHtml(l.county) + ' County' : ''}${l.zoning ? ' · ' + escapeHtml(l.zoning) : ''}</div>
         </button>
       `).join('');
       container.classList.add('visible');
@@ -803,7 +450,7 @@ function initMap() {
   container.innerHTML = '<div class="map-loading"><div class="map-loading-text">Loading map...</div><div class="map-loading-spinner"></div></div>';
 
   if (!mapboxgl.accessToken) {
-    container.innerHTML = '<div class="map-loading"><div class="map-loading-text">Mapbox token not configured. Set MAPBOX_TOKEN in Railway environment variables.</div></div>';
+    container.innerHTML = '<div class="map-loading"><div class="map-loading-text">Mapbox token not configured. Set NEXT_PUBLIC_MAPBOX_TOKEN in Railway environment variables.</div></div>';
     return;
   }
 
@@ -849,201 +496,42 @@ function updateMapStyle() {
 }
 
 function addParcelLayer() {
-  const geojson = {
-    type: 'FeatureCollection',
-    features: PARCELS.map(p => ({
-      type: 'Feature',
-      properties: { id: p.id, address: p.address, acreage: p.acreage, zoning: p.zoning, askingPrice: p.askingPrice, pipeline: p.pipeline || '' },
-      geometry: {
-        type: 'Polygon',
-        coordinates: [p.polygon]
-      }
-    }))
-  };
+  // ──────────────────────────────────────────────────────
+  // addParcelLayer() — Previously rendered hardcoded mock parcels.
+  // Now serves as a no-op placeholder. Real parcel boundaries come
+  // from Regrid MVT tiles via addRegridLayer().
+  // Pipeline leads from /api/leads are shown in the Pipeline view,
+  // not as map polygons (they don't have polygon geometry).
+  // ──────────────────────────────────────────────────────
 
-  // Clean up existing layers
-  ['parcel-fill', 'parcel-border', 'parcel-border-hover', 'parcel-border-selected', 'parcel-points', 'parcel-cluster-circles', 'parcel-cluster-count'].forEach(l => {
+  // Clean up any leftover layers from previous sessions
+  ['parcel-fill', 'parcel-border', 'parcel-border-hover', 'parcel-border-selected',
+   'parcel-points', 'parcel-cluster-circles', 'parcel-cluster-count'].forEach(l => {
     if (map.getLayer(l)) map.removeLayer(l);
   });
   if (map.getSource('parcels')) map.removeSource('parcels');
   if (map.getSource('parcel-points')) map.removeSource('parcel-points');
-
-  map.addSource('parcels', { type: 'geojson', data: geojson, generateId: true, promoteId: 'id' });
-
-  // Point source for clustering
-  const pointGeojson = {
-    type: 'FeatureCollection',
-    features: PARCELS.map(p => ({
-      type: 'Feature',
-      properties: { id: p.id, address: p.address, acreage: p.acreage },
-      geometry: { type: 'Point', coordinates: p.coords }
-    }))
-  };
-  map.addSource('parcel-points', {
-    type: 'geojson',
-    data: pointGeojson,
-    cluster: true,
-    clusterMaxZoom: 10,
-    clusterRadius: 50
-  });
-
-  // Cluster circles
-  map.addLayer({
-    id: 'parcel-cluster-circles',
-    type: 'circle',
-    source: 'parcel-points',
-    filter: ['has', 'point_count'],
-    paint: {
-      'circle-color': currentTheme === 'dark' ? '#D64848' : '#C03030',
-      'circle-radius': ['step', ['get', 'point_count'], 18, 4, 24, 8, 30],
-      'circle-opacity': 0.85,
-      'circle-stroke-width': 2,
-      'circle-stroke-color': currentTheme === 'dark' ? '#1E1E1E' : '#FFFFFF'
-    }
-  });
-
-  // Cluster count text
-  map.addLayer({
-    id: 'parcel-cluster-count',
-    type: 'symbol',
-    source: 'parcel-points',
-    filter: ['has', 'point_count'],
-    layout: {
-      'text-field': '{point_count_abbreviated}',
-      'text-font': ['DIN Pro Medium', 'Arial Unicode MS Bold'],
-      'text-size': 13
-    },
-    paint: {
-      'text-color': '#FFFFFF'
-    }
-  });
-
-  // Parcel fill — improved with semi-transparent fill based on pipeline status
-  map.addLayer({
-    id: 'parcel-fill',
-    type: 'fill',
-    source: 'parcels',
-    paint: {
-      'fill-color': [
-        'case',
-        ['==', ['get', 'id'], selectedParcelId || -1],
-        currentTheme === 'dark' ? 'rgba(214,72,72,0.2)' : 'rgba(192,48,48,0.12)',
-        ['!=', ['get', 'pipeline'], ''],
-        currentTheme === 'dark' ? 'rgba(77,168,99,0.1)' : 'rgba(43,94,58,0.08)',
-        currentTheme === 'dark' ? 'rgba(214,72,72,0.06)' : 'rgba(192,48,48,0.05)'
-      ],
-      'fill-opacity': 1
-    }
-  });
-
-  // Parcel border — improved with thicker strokes
-  map.addLayer({
-    id: 'parcel-border',
-    type: 'line',
-    source: 'parcels',
-    paint: {
-      'line-color': [
-        'case',
-        ['!=', ['get', 'pipeline'], ''],
-        currentTheme === 'dark' ? '#4DA863' : '#2B5E3A',
-        currentTheme === 'dark' ? '#D64848' : '#C03030'
-      ],
-      'line-width': 2,
-      'line-opacity': 0.7
-    }
-  });
-
-  map.addLayer({
-    id: 'parcel-border-hover',
-    type: 'line',
-    source: 'parcels',
-    paint: {
-      'line-color': currentTheme === 'dark' ? '#E0B84D' : '#D4A843',
-      'line-width': 3,
-      'line-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0]
-    }
-  });
-
-  map.addLayer({
-    id: 'parcel-border-selected',
-    type: 'line',
-    source: 'parcels',
-    paint: {
-      'line-color': currentTheme === 'dark' ? '#D64848' : '#C03030',
-      'line-width': 3.5,
-      'line-opacity': ['case', ['==', ['get', 'id'], selectedParcelId || -1], 1, 0]
-    }
-  });
-
-  // Improved tooltip
-  const tooltip = createTooltip();
-  let hoveredId = null;
-
-  map.on('mousemove', 'parcel-fill', (e) => {
-    map.getCanvas().style.cursor = 'pointer';
-    if (e.features.length > 0) {
-      if (hoveredId !== null) map.setFeatureState({ source: 'parcels', id: hoveredId }, { hover: false });
-      const feat = e.features[0];
-      hoveredId = feat.id;
-      map.setFeatureState({ source: 'parcels', id: hoveredId }, { hover: true });
-
-      const props = feat.properties;
-      const parcel = PARCELS.find(p => p.id === props.id);
-      const pipelineLabel = parcel && parcel.pipeline ? PIPELINE_STAGES.find(s => s.id === parcel.pipeline)?.label || '' : '';
-
-      tooltip.innerHTML = `
-        <div class="parcel-tooltip-address">${escapeHtml(props.address)}</div>
-        <div class="parcel-tooltip-acreage">${escapeHtml(String(props.acreage))} acres · ${escapeHtml(props.zoning)} · ${fmt(props.askingPrice)}</div>
-        ${pipelineLabel ? `<div class="parcel-tooltip-pipeline">${escapeHtml(pipelineLabel)}</div>` : ''}
-      `;
-      tooltip.classList.add('visible');
-
-      tooltip.style.left = (e.point.x) + 'px';
-      tooltip.style.top = (e.point.y - 12) + 'px';
-    }
-  });
-
-  map.on('mouseleave', 'parcel-fill', () => {
-    map.getCanvas().style.cursor = '';
-    if (hoveredId !== null) map.setFeatureState({ source: 'parcels', id: hoveredId }, { hover: false });
-    hoveredId = null;
-    tooltip.classList.remove('visible');
-  });
-
-  map.on('click', 'parcel-fill', (e) => {
-    if (e.features.length > 0) {
-      const pid = e.features[0].properties.id;
-      selectParcel(pid);
-    }
-  });
-
-  // Click on clusters to zoom in
-  map.on('click', 'parcel-cluster-circles', (e) => {
-    const features = map.queryRenderedFeatures(e.point, { layers: ['parcel-cluster-circles'] });
-    const clusterId = features[0].properties.cluster_id;
-    map.getSource('parcel-points').getClusterExpansionZoom(clusterId, (err, zoom) => {
-      if (err) return;
-      map.easeTo({ center: features[0].geometry.coordinates, zoom: zoom + 1 });
-    });
-  });
-
-  map.on('mouseenter', 'parcel-cluster-circles', () => {
-    map.getCanvas().style.cursor = 'pointer';
-  });
-  map.on('mouseleave', 'parcel-cluster-circles', () => {
-    map.getCanvas().style.cursor = '';
-  });
 }
 
 function addRegridLayer() {
-  if (!map || !window.REGRID_TOKEN) return;
+  // ──────────────────────────────────────────────────────
+  // REGRID MVT TILE LAYER — the primary parcel data source.
+  // Requires REGRID_API_KEY set in Railway environment variables.
+  // Tiles load at zoom >= 12 and show real parcel boundaries.
+  // Clicking a parcel opens the analysis sidebar with Regrid data.
+  // ──────────────────────────────────────────────────────
+  if (!map || !window.REGRID_TOKEN) {
+    console.log('Regrid layer not loaded — REGRID_API_KEY not set. Set it in Railway environment variables.');
+    return;
+  }
 
   // Clean up existing Regrid layers
-  ['regrid-parcels-line', 'regrid-parcels-fill'].forEach(l => {
+  ['regrid-parcels-line', 'regrid-parcels-fill', 'regrid-parcels-highlight'].forEach(l => {
     if (map.getLayer(l)) map.removeLayer(l);
   });
   if (map.getSource('regrid')) map.removeSource('regrid');
 
+  // Add Regrid MVT vector tile source
   map.addSource('regrid', {
     type: 'vector',
     tiles: [`https://tiles.regrid.com/api/v1/parcels/{z}/{x}/{y}.mvt?token=${window.REGRID_TOKEN}`],
@@ -1051,6 +539,7 @@ function addRegridLayer() {
     maxzoom: 16
   });
 
+  // Invisible fill layer for click detection
   map.addLayer({
     id: 'regrid-parcels-fill',
     type: 'fill',
@@ -1058,11 +547,12 @@ function addRegridLayer() {
     'source-layer': 'parcels',
     minzoom: 12,
     paint: {
-      'fill-color': 'transparent',
-      'fill-opacity': 0
+      'fill-color': currentTheme === 'dark' ? 'rgba(214,72,72,0.04)' : 'rgba(192,48,48,0.03)',
+      'fill-opacity': 1
     }
   });
 
+  // Parcel boundary lines
   map.addLayer({
     id: 'regrid-parcels-line',
     type: 'line',
@@ -1074,21 +564,203 @@ function addRegridLayer() {
     },
     paint: {
       'line-color': currentTheme === 'dark' ? '#D4A843' : '#C03030',
-      'line-width': 0.8,
-      'line-opacity': 0.5
+      'line-width': ['interpolate', ['linear'], ['zoom'], 12, 0.4, 14, 0.8, 16, 1.2],
+      'line-opacity': ['interpolate', ['linear'], ['zoom'], 12, 0.3, 14, 0.5, 16, 0.7]
     }
   });
 
-  // Click on Regrid parcel to show info
+  // Highlight layer for selected/hovered parcel
+  map.addLayer({
+    id: 'regrid-parcels-highlight',
+    type: 'line',
+    source: 'regrid',
+    'source-layer': 'parcels',
+    minzoom: 12,
+    paint: {
+      'line-color': currentTheme === 'dark' ? '#E0B84D' : '#D4A843',
+      'line-width': 2.5,
+      'line-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0]
+    }
+  });
+
+  // Tooltip on hover
+  const tooltip = createTooltip();
+
+  map.on('mousemove', 'regrid-parcels-fill', (e) => {
+    map.getCanvas().style.cursor = 'pointer';
+    if (e.features && e.features.length > 0) {
+      const props = e.features[0].properties;
+      const addr = props.address || props.parcelnumb || 'Unknown Parcel';
+      const owner = props.owner || '';
+      const acres = props.ll_gisacre ? parseFloat(props.ll_gisacre).toFixed(1) + ' acres' : '';
+      const county = props.county || '';
+
+      tooltip.innerHTML = `
+        <div class="parcel-tooltip-address">${escapeHtml(addr)}</div>
+        <div class="parcel-tooltip-acreage">${[acres, county].filter(Boolean).join(' · ')}</div>
+        ${owner ? `<div class="parcel-tooltip-acreage" style="margin-top:2px;">${escapeHtml(owner)}</div>` : ''}
+      `;
+      tooltip.classList.add('visible');
+      tooltip.style.left = (e.point.x) + 'px';
+      tooltip.style.top = (e.point.y - 12) + 'px';
+    }
+  });
+
+  map.on('mouseleave', 'regrid-parcels-fill', () => {
+    map.getCanvas().style.cursor = '';
+    tooltip.classList.remove('visible');
+  });
+
+  // Click on Regrid parcel → open the analysis sidebar
   map.on('click', 'regrid-parcels-fill', (e) => {
     if (!e.features || !e.features.length) return;
-    const props = e.features[0].properties;
-    const addr = props.address || props.parcelnumb || 'Unknown Parcel';
-    new mapboxgl.Popup({ maxWidth: '280px' })
-      .setLngLat(e.lngLat)
-      .setHTML(`<div style="font-family:Inter,sans-serif;font-size:13px;"><strong>${addr}</strong><br>${props.owner || ''}<br>${props.ll_gisacre ? parseFloat(props.ll_gisacre).toFixed(1) + ' acres' : ''}</div>`)
-      .addTo(map);
+    const feat = e.features[0];
+    const props = feat.properties;
+
+    // Build a parcel-like object from Regrid tile properties
+    // Regrid MVT tiles include fields like: address, owner, parcelnumb,
+    // ll_gisacre, county, municipality, zoning, landval, etc.
+    const regridParcel = buildParcelFromRegrid(props, e.lngLat);
+    selectRegridParcel(regridParcel);
   });
+}
+
+/**
+ * Build a parcel-like data object from Regrid MVT tile properties.
+ * Regrid tiles contain many fields — we map the most useful ones
+ * into the same structure our analysis panel expects.
+ */
+function buildParcelFromRegrid(props, lngLat) {
+  const acreage = props.ll_gisacre ? parseFloat(props.ll_gisacre) : 0;
+  const landVal = props.landval ? parseInt(props.landval) : 0;
+  const improvVal = props.improvval ? parseInt(props.improvval) : 0;
+  const totalVal = props.parval ? parseInt(props.parval) : (landVal + improvVal);
+  const salePrice = props.saleprice ? parseInt(props.saleprice) : 0;
+
+  return {
+    id: props.parcelnumb || props.ll_uuid || 'regrid-' + Date.now(),
+    address: props.address || props.parcelnumb || 'Unknown Address',
+    apn: props.parcelnumb || 'N/A',
+    acreage: acreage,
+    owner: props.owner || 'Unknown Owner',
+    ownerAddress: props.mailadd || 'N/A',
+    landValue: landVal,
+    improvementValue: improvVal,
+    totalValue: totalVal,
+    askingPrice: totalVal || 0,
+    lastSaleDate: props.saledate || 'N/A',
+    lastSalePrice: salePrice,
+    zoning: props.zoning || props.zoning_id || 'N/A',
+    zoningFull: props.zoning_description || props.zoning || 'N/A',
+    township: props.municipality || props.city || 'N/A',
+    county: props.county || 'N/A',
+    schoolDistrict: props.school_district || 'N/A',
+    // Development standards — not available from MVT tiles, show N/A
+    minLotSize: 'N/A (check local zoning)',
+    minFrontage: 'N/A (check local zoning)',
+    maxHeight: 'N/A (check local zoning)',
+    frontSetback: 'N/A (check local zoning)',
+    sideSetback: 'N/A (check local zoning)',
+    rearSetback: 'N/A (check local zoning)',
+    maxCoverage: 'N/A (check local zoning)',
+    permittedUses: ['Check local zoning ordinance'],
+    conditionalUses: ['Check local zoning ordinance'],
+    suitableForDev: true,
+    // Feasibility defaults
+    lotYield: Math.max(1, Math.floor(acreage / 1.5)),
+    avgConstructionCost: 40000,
+    avgFinishedLotPrice: 85000,
+    // Environmental — not available from MVT, show defaults
+    floodZone: 'Check FEMA map',
+    floodRisk: 'Unknown',
+    wetlands: 'Check NWI data',
+    wetlandsAcres: 0,
+    topography: 'Check site survey',
+    soilType: 'Check USDA soil survey',
+    // Coordinates
+    coords: [lngLat.lng, lngLat.lat],
+    polygon: [],
+    pipeline: null,
+    pipelineDays: 0,
+    estimatedBuildCost: 400000,
+    estimatedHomeValue: 550000,
+    comparableHomeSales: [],
+    // Flag that this came from Regrid (useful for UI)
+    _fromRegrid: true
+  };
+}
+
+/**
+ * Select a Regrid parcel and open the analysis panel.
+ * Similar to selectParcel() but works with dynamically built parcel data.
+ */
+async function selectRegridParcel(parcel) {
+  selectedParcelId = parcel.id;
+  currentTab = 'overview';
+
+  // Store the parcel data so other functions can find it
+  window._selectedRegridParcel = parcel;
+
+  // Update header
+  document.getElementById('panelAddress').textContent = parcel.address;
+  document.getElementById('panelAPN').textContent = `APN: ${parcel.apn}`;
+  document.getElementById('panelAcreage').textContent = `${parcel.acreage.toFixed(1)} acres`;
+  document.getElementById('panelZoning').textContent = parcel.zoning;
+
+  const priceBadge = document.getElementById('panelPrice');
+  if (priceBadge) priceBadge.textContent = parcel.totalValue ? fmt(parcel.totalValue) : 'N/A';
+
+  const pipelineBadge = document.getElementById('panelPipeline');
+  if (pipelineBadge) pipelineBadge.style.display = 'none';
+
+  const addPipelineBtn = document.getElementById('addToPipelineBtn');
+  if (addPipelineBtn) addPipelineBtn.style.display = 'none';
+
+  // Reset feasibility state
+  feasibilityState = {
+    margin: appSettings.defaultMargin || 25,
+    lotYield: parcel.lotYield,
+    constructionCost: parcel.avgConstructionCost,
+    finishedLotPrice: parcel.avgFinishedLotPrice,
+    mode: 'subdivision'
+  };
+
+  // Show loading state
+  const tabContent = document.getElementById('analysisTabContent');
+  tabContent.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:var(--space-8);gap:var(--space-3);text-align:center;">
+    <div class="map-loading-spinner"></div>
+    <div style="font-size:var(--text-sm);color:var(--color-text-muted);line-height:1.5;">Loading Regrid parcel data…</div>
+  </div>`;
+  await new Promise(r => setTimeout(r, 400));
+  renderTabContent(parcel, 'overview');
+
+  // Update tabs
+  document.querySelectorAll('.analysis-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === 'overview');
+  });
+
+  const panel = document.getElementById('analysisPanel');
+  panel.classList.add('open');
+
+  document.getElementById('closePanelBtn').onclick = () => {
+    panel.classList.remove('open');
+    selectedParcelId = null;
+    window._selectedRegridParcel = null;
+  };
+
+  document.querySelectorAll('.analysis-tab').forEach(tab => {
+    tab.onclick = () => {
+      currentTab = tab.dataset.tab;
+      document.querySelectorAll('.analysis-tab').forEach(t => t.classList.toggle('active', t === tab));
+      renderTabContent(parcel, currentTab);
+    };
+  });
+
+  if (map) {
+    map.flyTo({ center: parcel.coords, zoom: Math.max(map.getZoom(), 15), duration: 800 });
+  }
+
+  lucide.createIcons();
 }
 
 function createTooltip() {
@@ -1101,14 +773,15 @@ function createTooltip() {
   return tt;
 }
 
-// Fit to all parcels button
-function fitToParcels() {
+// Center map on Michigan
+function fitToMichigan() {
   if (!map) return;
-  const bounds = new mapboxgl.LngLatBounds();
-  PARCELS.forEach(p => {
-    p.polygon.forEach(coord => bounds.extend(coord));
-  });
-  map.fitBounds(bounds, { padding: 60, duration: 1000 });
+  map.flyTo({ center: [-85.0, 44.3], zoom: 6, duration: 1200 });
+}
+
+// Legacy: fitToParcels now redirects to fitToMichigan
+function fitToParcels() {
+  fitToMichigan();
 }
 
 
@@ -1118,30 +791,32 @@ function renderMapStats() {
   const container = document.getElementById('mapStats');
   if (!container) return;
 
-  const totalAcres = PARCELS.reduce((s, p) => s + p.acreage, 0);
-  const totalValue = PARCELS.reduce((s, p) => s + p.askingPrice, 0);
-  const inPipeline = PARCELS.filter(p => p.pipeline !== null).length;
+  // Stats from real pipeline leads (API data)
+  const totalLeads = apiLeads.length;
+  const totalAcres = apiLeads.reduce((s, l) => s + (parseFloat(l.acreage) || 0), 0);
+  const totalValue = apiLeads.reduce((s, l) => s + (parseFloat(l.asking_price) || 0), 0);
+  const inPipeline = apiLeads.filter(l => l.stage && l.stage !== 'new_lead').length;
 
   container.innerHTML = `
     <div class="stat-card">
-      <div class="stat-value">${PARCELS.length}</div>
-      <div class="stat-label">Parcels</div>
+      <div class="stat-value">${totalLeads}</div>
+      <div class="stat-label">Pipeline Leads</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">${totalAcres.toLocaleString()}</div>
+      <div class="stat-value">${totalAcres > 0 ? totalAcres.toLocaleString(undefined, {maximumFractionDigits: 0}) : '—'}</div>
       <div class="stat-label">Total Acres</div>
     </div>
     <div class="stat-card">
-      <div class="stat-value">${fmtCompact(totalValue)}</div>
+      <div class="stat-value">${totalValue > 0 ? fmtCompact(totalValue) : '—'}</div>
       <div class="stat-label">Total Value</div>
     </div>
     <div class="stat-card">
       <div class="stat-value">${inPipeline}</div>
       <div class="stat-label">In Pipeline</div>
     </div>
-    <button class="stat-card stat-card--btn" onclick="fitToParcels()" title="Fit map to all parcels">
+    <button class="stat-card stat-card--btn" onclick="fitToMichigan()" title="Center on Michigan">
       <i data-lucide="maximize-2" width="14" height="14"></i>
-      <div class="stat-label">Fit All</div>
+      <div class="stat-label">Michigan</div>
     </button>
   `;
   lucide.createIcons({ nodes: [container] });
@@ -1151,7 +826,21 @@ function renderMapStats() {
 // ==================== ANALYSIS PANEL ====================
 
 async function selectParcel(id) {
-  const parcel = PARCELS.find(p => p.id === id);
+  // Look up parcel data — check Regrid selection, then API leads, then legacy PARCELS
+  let parcel = window._selectedRegridParcel && window._selectedRegridParcel.id === id
+    ? window._selectedRegridParcel
+    : null;
+  if (!parcel) {
+    // Check API leads
+    const apiLead = apiLeads.find(l => l.id === id);
+    if (apiLead) {
+      // Navigate to pipeline view for API leads
+      window.location.hash = '#pipeline';
+      openLeadDetail(id, 'api');
+      return;
+    }
+  }
+  if (!parcel) parcel = PARCELS.find(p => p.id === id);
   if (!parcel) return;
 
   selectedParcelId = id;
@@ -1743,7 +1432,8 @@ function initAIChatListeners(parcel) {
 }
 
 function sendChatQuestion(q) {
-  const parcel = PARCELS.find(p => p.id === selectedParcelId);
+  // Get the currently selected parcel (Regrid or legacy)
+  const parcel = window._selectedRegridParcel || PARCELS.find(p => p.id === selectedParcelId);
   if (!parcel) return;
   const input = document.getElementById('chatInput');
   if (input) input.value = '';

@@ -1,9 +1,10 @@
 // ==================== GENERATE REPORT ====================
 
 async function generateReport() {
-  const parcel = PARCELS.find(p => p.id === selectedParcelId);
+  // Get the currently selected parcel (Regrid or legacy)
+  const parcel = window._selectedRegridParcel || PARCELS.find(p => p.id === selectedParcelId);
   if (!parcel) {
-    showToast('Error', 'Select a parcel first');
+    showToast('Error', 'Select a parcel first — zoom into the map and click on a Regrid parcel');
     return;
   }
 
@@ -212,9 +213,15 @@ function toggleOverlayLayer(layer, visible) {
   const vis = visible ? 'visible' : 'none';
 
   if (layer === 'parcels') {
-    // Toggle Regrid parcel boundary lines
+    // Toggle Regrid parcel boundary lines and fill
     if (map.getLayer('regrid-parcels-line')) {
       map.setLayoutProperty('regrid-parcels-line', 'visibility', vis);
+    }
+    if (map.getLayer('regrid-parcels-fill')) {
+      map.setLayoutProperty('regrid-parcels-fill', 'visibility', vis);
+    }
+    if (map.getLayer('regrid-parcels-highlight')) {
+      map.setLayoutProperty('regrid-parcels-highlight', 'visibility', vis);
     }
   }
   if (layer === 'flood') {
@@ -816,22 +823,11 @@ function goToParcelFromPipeline(id) {
 
 // Add to Pipeline function
 function addToPipeline(id) {
-  const parcel = PARCELS.find(p => p.id === id);
+  // For Regrid parcels, we'd need to create them as API leads first
+  // For now, show a message that this feature will be available with full Regrid API
+  const parcel = window._selectedRegridParcel || PARCELS.find(p => p.id === id);
   if (parcel) {
-    parcel.pipeline = 'lead';
-    parcel.pipelineDays = 0;
-    renderPipeline();
-    renderMapStats();
-
-    const pipelineBadge = document.getElementById('panelPipeline');
-    if (pipelineBadge) {
-      pipelineBadge.textContent = 'Lead';
-      pipelineBadge.style.display = 'inline-flex';
-    }
-    const addBtn = document.getElementById('addToPipelineBtn');
-    if (addBtn) addBtn.style.display = 'none';
-
-    showToast('Added to Pipeline', `${parcel.address} added as Lead`);
+    showToast('Coming Soon', 'Adding Regrid parcels to pipeline will be available with the full Regrid API integration');
   }
 }
 
@@ -1434,7 +1430,7 @@ function showToast(title, message) {
 
 function switchFeasibilityMode(mode) {
   feasibilityState.mode = mode;
-  const parcel = PARCELS.find(p => p.id === selectedParcelId);
+  const parcel = window._selectedRegridParcel || PARCELS.find(p => p.id === selectedParcelId);
   if (parcel) {
     renderTabContent(parcel, 'feasibility');
     initFeasibilityListeners(parcel);
