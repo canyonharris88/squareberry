@@ -200,9 +200,35 @@ function initLayerToggles() {
         updateMapStyle();
       } else {
         btn.classList.toggle('active');
+        const isActive = btn.classList.contains('active');
+        toggleOverlayLayer(layer, isActive);
       }
     });
   });
+}
+
+function toggleOverlayLayer(layer, visible) {
+  if (!map) return;
+  const vis = visible ? 'visible' : 'none';
+
+  if (layer === 'parcels') {
+    // Toggle Regrid parcel boundary lines
+    if (map.getLayer('regrid-parcels-line')) {
+      map.setLayoutProperty('regrid-parcels-line', 'visibility', vis);
+    }
+  }
+  if (layer === 'flood') {
+    // Flood zone layer — requires FEMA NFHL data source (future integration)
+    if (map.getLayer('flood-zones')) {
+      map.setLayoutProperty('flood-zones', 'visibility', vis);
+    }
+  }
+  if (layer === 'wetlands') {
+    // Wetlands layer — requires NWI data source (future integration)
+    if (map.getLayer('wetlands-fill')) {
+      map.setLayoutProperty('wetlands-fill', 'visibility', vis);
+    }
+  }
 }
 
 

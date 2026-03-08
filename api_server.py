@@ -194,7 +194,8 @@ async def rate_limit_middleware(request: Request, call_next):
 async def get_config():
     """Serve client-side configuration like the Mapbox token."""
     return {
-        "mapbox_token": os.environ.get("MAPBOX_TOKEN", "")
+        "mapbox_token": os.environ.get("MAPBOX_TOKEN", ""),
+        "regrid_token": os.environ.get("REGRID_TOKEN", "")
     }
 
 

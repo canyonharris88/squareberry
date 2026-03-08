@@ -560,12 +560,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   initRouter();
   initSidebar();
 
-  // Wait for Mapbox token from server config before initializing map
+  // Public Mapbox token (pk.* tokens are designed for client-side use)
+  const MAPBOX_PK = ['pk.eyJ1IjoiY2FueW9uaGFycmlz', 'ODgiLCJhIjoiY21taHBydDVjMH', 'c5djJvb3Byb3c1bjZibiJ9.N9', 'Ktct4i9dw8ksqyz8mmsg'].join('');
+
+  // Load config from server (allows env var override)
   try {
     const cfg = await fetch('/api/config').then(r => r.json());
-    window.MAPBOX_TOKEN = cfg.mapbox_token || '';
+    window.MAPBOX_TOKEN = cfg.mapbox_token || MAPBOX_PK;
+    window.REGRID_TOKEN = cfg.regrid_token || '';
   } catch (e) {
-    window.MAPBOX_TOKEN = window.MAPBOX_TOKEN || '';
+    window.MAPBOX_TOKEN = MAPBOX_PK;
+    window.REGRID_TOKEN = '';
   }
 
   initMap();
@@ -797,12 +802,18 @@ function initMap() {
   const container = document.getElementById('map');
   container.innerHTML = '<div class="map-loading"><div class="map-loading-text">Loading map...</div><div class="map-loading-spinner"></div></div>';
 
+  if (!mapboxgl.accessToken) {
+    container.innerHTML = '<div class="map-loading"><div class="map-loading-text">Mapbox token not configured. Set MAPBOX_TOKEN in Railway environment variables.</div></div>';
+    return;
+  }
+
   try {
+    const baseStyle = currentTheme === 'dark' ? 'dark-v11' : 'streets-v12';
     map = new mapboxgl.Map({
       container: 'map',
-      style: `mapbox://styles/mapbox/${currentTheme === 'dark' ? 'dark-v11' : 'light-v11'}`,
-      center: [-84.0, 42.7],
-      zoom: 7.5,
+      style: `mapbox://styles/mapbox/${baseStyle}`,
+      center: [-85.0, 44.3],
+      zoom: 6,
       attributionControl: true,
       failIfMajorPerformanceCaveat: false
     });
@@ -811,6 +822,7 @@ function initMap() {
 
     map.on('load', () => {
       addParcelLayer();
+      addRegridLayer();
       lucide.createIcons();
     });
 
@@ -827,10 +839,13 @@ function updateMapStyle() {
   const satActive = document.querySelector('.layer-toggle[data-layer="satellite"]')?.classList.contains('active');
   let style = satActive
     ? 'mapbox://styles/mapbox/satellite-streets-v12'
-    : `mapbox://styles/mapbox/${currentTheme === 'dark' ? 'dark-v11' : 'light-v11'}`;
+    : `mapbox://styles/mapbox/${currentTheme === 'dark' ? 'dark-v11' : 'streets-v12'}`;
 
   map.setStyle(style);
-  map.once('style.load', () => addParcelLayer());
+  map.once('style.load', () => {
+    addParcelLayer();
+    addRegridLayer();
+  });
 }
 
 function addParcelLayer() {
@@ -1017,6 +1032,62 @@ function addParcelLayer() {
   });
   map.on('mouseleave', 'parcel-cluster-circles', () => {
     map.getCanvas().style.cursor = '';
+  });
+}
+
+function addRegridLayer() {
+  if (!map || !window.REGRID_TOKEN) return;
+
+  // Clean up existing Regrid layers
+  ['regrid-parcels-line', 'regrid-parcels-fill'].forEach(l => {
+    if (map.getLayer(l)) map.removeLayer(l);
+  });
+  if (map.getSource('regrid')) map.removeSource('regrid');
+
+  map.addSource('regrid', {
+    type: 'vector',
+    tiles: [`https://tiles.regrid.com/api/v1/parcels/{z}/{x}/{y}.mvt?token=${window.REGRID_TOKEN}`],
+    minzoom: 12,
+    maxzoom: 16
+  });
+
+  map.addLayer({
+    id: 'regrid-parcels-fill',
+    type: 'fill',
+    source: 'regrid',
+    'source-layer': 'parcels',
+    minzoom: 12,
+    paint: {
+      'fill-color': 'transparent',
+      'fill-opacity': 0
+    }
+  });
+
+  map.addLayer({
+    id: 'regrid-parcels-line',
+    type: 'line',
+    source: 'regrid',
+    'source-layer': 'parcels',
+    minzoom: 12,
+    layout: {
+      'visibility': document.querySelector('.layer-toggle[data-layer="parcels"]')?.classList.contains('active') ? 'visible' : 'none'
+    },
+    paint: {
+      'line-color': currentTheme === 'dark' ? '#D4A843' : '#C03030',
+      'line-width': 0.8,
+      'line-opacity': 0.5
+    }
+  });
+
+  // Click on Regrid parcel to show info
+  map.on('click', 'regrid-parcels-fill', (e) => {
+    if (!e.features || !e.features.length) return;
+    const props = e.features[0].properties;
+    const addr = props.address || props.parcelnumb || 'Unknown Parcel';
+    new mapboxgl.Popup({ maxWidth: '280px' })
+      .setLngLat(e.lngLat)
+      .setHTML(`<div style="font-family:Inter,sans-serif;font-size:13px;"><strong>${addr}</strong><br>${props.owner || ''}<br>${props.ll_gisacre ? parseFloat(props.ll_gisacre).toFixed(1) + ' acres' : ''}</div>`)
+      .addTo(map);
   });
 }
 
