@@ -119,7 +119,7 @@ let currentTheme = 'light';
 let selectedParcelId = null;
 let currentTab = 'overview';
 let sidebarCollapsed = false;
-let currentView = 'map';
+let currentView = 'scout';
 let searchResults = [];
 let showNewAlertForm = false;
 
@@ -219,8 +219,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.REGRID_TOKEN = '';
   }
 
-  initMap();
-  initLayerToggles();
   initSearch();
   // Fetch all data from API in parallel
   await Promise.all([
@@ -229,10 +227,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     fetchApiReports(),
     loadSettingsFromApi()
   ]);
+  renderScoutAgent();
   renderPipeline();
   renderAlerts();
   renderReports();
-  renderSettings();
+  renderProfile();
   renderMapStats();
   lucide.createIcons();
 });
@@ -269,11 +268,11 @@ function updateThemeIcon() {
 // ==================== ROUTER ====================
 
 function initRouter() {
-  const hash = window.location.hash.slice(1) || 'map';
+  const hash = window.location.hash.slice(1) || 'scout';
   switchView(hash);
 
   window.addEventListener('hashchange', () => {
-    const h = window.location.hash.slice(1) || 'map';
+    const h = window.location.hash.slice(1) || 'scout';
     switchView(h);
   });
 }
@@ -289,14 +288,25 @@ function switchView(view) {
     el.classList.toggle('active', el.id === `view-${view}`);
   });
 
+  // Show layer toggles and map stats only on map view
   const lt = document.getElementById('layerToggles');
   if (lt) lt.style.display = view === 'map' ? 'flex' : 'none';
 
   const stats = document.getElementById('mapStats');
   if (stats) stats.style.display = view === 'map' ? 'flex' : 'none';
 
-  if (view === 'map' && map) {
-    setTimeout(() => map.resize(), 50);
+  // Show demo banner only on map view
+  const demoBanner = document.getElementById('demoBanner');
+  if (demoBanner) demoBanner.style.display = view === 'map' ? 'flex' : 'none';
+
+  // Lazy-init map only when map view is first accessed
+  if (view === 'map') {
+    if (!map) {
+      initMap();
+      initLayerToggles();
+    } else {
+      setTimeout(() => map.resize(), 50);
+    }
   }
 }
 
@@ -322,10 +332,7 @@ function initSidebar() {
   const mobileMenuBtn = document.getElementById('mobileMenuBtn');
   const sidebar = document.getElementById('sidebar');
   if (mobileMenuBtn && sidebar) {
-    // Create backdrop overlay element
-    const overlay = document.createElement('div');
-    overlay.className = 'mobile-sidebar-overlay';
-    document.body.appendChild(overlay);
+    const overlay = document.getElementById('mobileSidebarOverlay');
 
     const openMobileSidebar = () => {
       sidebar.classList.add('mobile-open');
@@ -492,18 +499,12 @@ function updateMapStyle() {
   map.once('style.load', () => {
     addParcelLayer();
     addRegridLayer();
+    // Re-add demo county boundaries after style change
+    addMichiganCountyGeoJSON();
   });
 }
 
 function addParcelLayer() {
-  // ──────────────────────────────────────────────────────
-  // addParcelLayer() — Previously rendered hardcoded mock parcels.
-  // Now serves as a no-op placeholder. Real parcel boundaries come
-  // from Regrid MVT tiles via addRegridLayer().
-  // Pipeline leads from /api/leads are shown in the Pipeline view,
-  // not as map polygons (they don't have polygon geometry).
-  // ──────────────────────────────────────────────────────
-
   // Clean up any leftover layers from previous sessions
   ['parcel-fill', 'parcel-border', 'parcel-border-hover', 'parcel-border-selected',
    'parcel-points', 'parcel-cluster-circles', 'parcel-cluster-count'].forEach(l => {
@@ -511,6 +512,94 @@ function addParcelLayer() {
   });
   if (map.getSource('parcels')) map.removeSource('parcels');
   if (map.getSource('parcel-points')) map.removeSource('parcel-points');
+
+  // ── DEMO MODE: Census TIGER county boundaries for Michigan ──
+  // Uses free US Census Bureau TIGER line boundaries to show
+  // Michigan county outlines as lightweight demo data.
+  addDemoCountyBoundaries();
+}
+
+function addDemoCountyBoundaries() {
+  if (!map) return;
+
+  // Clean up existing demo layers
+  ['demo-county-fill', 'demo-county-line', 'demo-county-labels'].forEach(l => {
+    if (map.getLayer(l)) map.removeLayer(l);
+  });
+  if (map.getSource('demo-counties')) map.removeSource('demo-counties');
+
+  // Census TIGER WMS — Michigan county boundaries (FIPS 26)
+  // This is free public data, no API key needed.
+  map.addSource('demo-counties', {
+    type: 'vector',
+    tiles: [
+      'https://tiles.arcgis.com/tiles/VTyQ9soqVukalItT/arcgis/rest/services/Administrative_Boundaries_US_Counties_Generalized/VectorTileServer/tile/{z}/{y}/{x}.pbf'
+    ],
+    minzoom: 4,
+    maxzoom: 12
+  });
+
+  // If the ArcGIS tiles don't work, fall back to a simple GeoJSON of MI counties
+  // We'll use a lightweight Michigan-only approach with a GeoJSON source
+  try {
+    addMichiganCountyGeoJSON();
+  } catch (e) {
+    console.log('Demo county boundaries: using basic outline');
+  }
+}
+
+function addMichiganCountyGeoJSON() {
+  // Remove demo-counties source if it was added above and didn't work
+  ['demo-county-fill', 'demo-county-line'].forEach(l => {
+    if (map.getLayer(l)) map.removeLayer(l);
+  });
+  if (map.getSource('demo-counties')) map.removeSource('demo-counties');
+
+  // Use the US Census Bureau's cartographic boundary GeoJSON endpoint
+  // This is 100% free/public and returns county polygons
+  const tigerUrl = 'https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json';
+
+  fetch(tigerUrl)
+    .then(r => r.json())
+    .then(geojson => {
+      // Filter to Michigan counties only (FIPS prefix "26")
+      const michiganCounties = {
+        type: 'FeatureCollection',
+        features: geojson.features.filter(f => f.id && f.id.startsWith('26'))
+      };
+
+      if (!map || !map.loaded()) return;
+      if (map.getSource('mi-counties')) return;
+
+      map.addSource('mi-counties', {
+        type: 'geojson',
+        data: michiganCounties
+      });
+
+      map.addLayer({
+        id: 'mi-county-fill',
+        type: 'fill',
+        source: 'mi-counties',
+        paint: {
+          'fill-color': currentTheme === 'dark' ? 'rgba(212,168,67,0.06)' : 'rgba(43,94,58,0.04)',
+          'fill-opacity': 0.8
+        }
+      });
+
+      map.addLayer({
+        id: 'mi-county-line',
+        type: 'line',
+        source: 'mi-counties',
+        paint: {
+          'line-color': currentTheme === 'dark' ? '#D4A843' : '#2B5E3A',
+          'line-width': ['interpolate', ['linear'], ['zoom'], 4, 0.5, 8, 1.2, 12, 1.8],
+          'line-opacity': 0.5
+        }
+      });
+    })
+    .catch(err => {
+      console.log('Could not load demo county boundaries:', err.message);
+    });
 }
 
 function addRegridLayer() {

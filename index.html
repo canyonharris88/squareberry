@@ -8,12 +8,12 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="SquareBerry">
-  <meta name="description" content="SquareBerry — AI-powered land intelligence platform for developers">
+  <meta name="description" content="SquareBerry — AI-powered Michigan land intelligence for developers">
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./logo-180.png">
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="./favicon.png">
-  <title>SquareBerry | AI Land Intelligence</title>
+  <title>SquareBerry | Michigan Land Intelligence</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -25,7 +25,7 @@
 </head>
 <body>
   <div class="app-shell">
-    <!-- ===== SIDEBAR ===== -->
+    <!-- ===== SIDEBAR (Desktop) ===== -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <div class="logo-wrap">
@@ -38,9 +38,9 @@
       </div>
 
       <nav class="sidebar-nav" role="navigation" aria-label="Main navigation">
-        <a href="#map" class="nav-item active" data-view="map">
-          <i data-lucide="map-pin" width="18" height="18"></i>
-          <span class="nav-label">Map</span>
+        <a href="#scout" class="nav-item active" data-view="scout">
+          <i data-lucide="radar" width="18" height="18"></i>
+          <span class="nav-label">Scout Agent</span>
         </a>
         <a href="#pipeline" class="nav-item" data-view="pipeline">
           <i data-lucide="kanban" width="18" height="18"></i>
@@ -54,9 +54,9 @@
           <i data-lucide="file-text" width="18" height="18"></i>
           <span class="nav-label">Reports</span>
         </a>
-        <a href="#settings" class="nav-item" data-view="settings">
-          <i data-lucide="settings" width="18" height="18"></i>
-          <span class="nav-label">Settings</span>
+        <a href="#profile" class="nav-item" data-view="profile">
+          <i data-lucide="user" width="18" height="18"></i>
+          <span class="nav-label">Profile</span>
         </a>
       </nav>
 
@@ -73,9 +73,9 @@
 
     <!-- ===== MOBILE BOTTOM NAV ===== -->
     <nav class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobile navigation">
-      <a href="#map" class="mobile-nav-item active" data-view="map">
-        <i data-lucide="map-pin" width="20" height="20"></i>
-        <span>Map</span>
+      <a href="#scout" class="mobile-nav-item active" data-view="scout">
+        <i data-lucide="radar" width="20" height="20"></i>
+        <span>Scout</span>
       </a>
       <a href="#pipeline" class="mobile-nav-item" data-view="pipeline">
         <i data-lucide="kanban" width="20" height="20"></i>
@@ -89,9 +89,9 @@
         <i data-lucide="file-text" width="20" height="20"></i>
         <span>Reports</span>
       </a>
-      <a href="#settings" class="mobile-nav-item" data-view="settings">
-        <i data-lucide="settings" width="20" height="20"></i>
-        <span>Settings</span>
+      <a href="#profile" class="mobile-nav-item" data-view="profile">
+        <i data-lucide="user" width="20" height="20"></i>
+        <span>Profile</span>
       </a>
     </nav>
 
@@ -118,6 +118,7 @@
           <button class="layer-toggle" data-layer="wetlands">Wetlands</button>
         </div>
         <div class="topbar-right">
+          <span class="michigan-badge" title="Michigan Only - MVP">MI MVP</span>
           <button class="icon-btn" aria-label="Notifications" title="Notifications">
             <i data-lucide="bell" width="18" height="18"></i>
             <span class="notification-dot"></span>
@@ -129,26 +130,38 @@
         </div>
       </header>
 
-      <!-- ===== MAP STATS ===== -->
+      <!-- ===== MAP STATS (only visible on map view) ===== -->
       <div class="map-stats" id="mapStats">
         <!-- Injected by JS -->
       </div>
 
-      <!-- ===== MAP VIEW ===== -->
-      <div class="view-content active" id="view-map">
+      <!-- ===== SCOUT AGENT VIEW (Primary/Default) ===== -->
+      <div class="view-content active" id="view-scout">
+        <div class="scout-container" id="scoutContainer">
+          <!-- Injected by renderScoutAgent() -->
+        </div>
+      </div>
+
+      <!-- ===== MAP VIEW (Secondary, via "View on Map") ===== -->
+      <div class="view-content" id="view-map">
+        <!-- Demo Mode Banner -->
+        <div class="demo-banner" id="demoBanner">
+          <i data-lucide="info" width="16" height="16"></i>
+          <span>Temporary Demo Mode &mdash; Full Regrid integration coming soon</span>
+        </div>
         <div id="map" class="map-container"></div>
 
         <!-- Analysis Panel -->
         <div class="analysis-panel" id="analysisPanel">
           <div class="analysis-panel-header">
             <div class="analysis-panel-title-section">
-              <h2 class="analysis-panel-address" id="panelAddress">—</h2>
-              <p class="analysis-panel-apn" id="panelAPN">—</p>
+              <h2 class="analysis-panel-address" id="panelAddress">&mdash;</h2>
+              <p class="analysis-panel-apn" id="panelAPN">&mdash;</p>
               <div class="analysis-panel-badges">
-                <span class="badge badge-neutral" id="panelAcreage">—</span>
-                <span class="badge badge-neutral" id="panelZoning">—</span>
-                <span class="badge badge-primary" id="panelPrice">—</span>
-                <span class="badge badge-success" id="panelPipeline" style="display:none;">—</span>
+                <span class="badge badge-neutral" id="panelAcreage">&mdash;</span>
+                <span class="badge badge-neutral" id="panelZoning">&mdash;</span>
+                <span class="badge badge-primary" id="panelPrice">&mdash;</span>
+                <span class="badge badge-success" id="panelPipeline" style="display:none;">&mdash;</span>
               </div>
             </div>
             <div class="analysis-panel-actions">
@@ -215,18 +228,17 @@
         </div>
       </div>
 
-      <!-- ===== SETTINGS VIEW ===== -->
-      <div class="view-content" id="view-settings">
-        <div class="page-header">
-          <h1 class="page-title">Settings</h1>
-          <p class="page-subtitle">Configure your workspace</p>
-        </div>
-        <div class="settings-container" id="settingsContainer">
-          <!-- Injected by JS -->
+      <!-- ===== PROFILE VIEW (with embedded Settings) ===== -->
+      <div class="view-content" id="view-profile">
+        <div class="profile-container" id="profileContainer">
+          <!-- Injected by renderProfile() -->
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Mobile sidebar overlay -->
+  <div class="mobile-sidebar-overlay" id="mobileSidebarOverlay"></div>
 
   <script src="./app-core.js"></script>
   <script src="./app-features.js"></script>
