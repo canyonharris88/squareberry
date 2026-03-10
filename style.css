@@ -84,53 +84,7 @@
   --map-style: light-v11;
 }
 
-/* ===== DARK MODE ===== */
-[data-theme="dark"] {
-  --color-bg:              #0E0E0E;
-  --color-surface:         #161616;
-  --color-surface-2:       #1E1E1E;
-  --color-surface-offset:  #262626;
-  --color-surface-offset-2:#2E2E2E;
-  --color-surface-dynamic: #383838;
-  --color-divider:         #2A2A2A;
-  --color-border:          #363636;
 
-  --color-text:            #E4E4E0;
-  --color-text-muted:      #8E8E88;
-  --color-text-faint:      #5C5C58;
-  --color-text-inverse:    #0E0E0E;
-
-  --color-primary:         #D64848;
-  --color-primary-hover:   #E25A5A;
-  --color-primary-active:  #C03838;
-  --color-primary-highlight: rgba(214, 72, 72, 0.12);
-  --color-primary-surface:  rgba(214, 72, 72, 0.06);
-
-  --color-success:         #4DA863;
-  --color-success-hover:   #5FBB75;
-  --color-success-surface:  rgba(77, 168, 99, 0.1);
-
-  --color-warning:         #E0B84D;
-  --color-warning-hover:   #EDCA60;
-  --color-warning-surface:  rgba(224, 184, 77, 0.1);
-
-  --color-gold:            #E0B84D;
-
-  --color-error:           #D64848;
-  --color-error-surface:    rgba(214, 72, 72, 0.1);
-
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
-  --shadow-md: 0 2px 8px rgba(0,0,0,0.35);
-  --shadow-lg: 0 8px 24px rgba(0,0,0,0.4);
-  --shadow-panel: 0 0 0 1px rgba(255,255,255,.06), 0 8px 32px rgba(0,0,0,.4);
-
-  --color-sidebar-bg: #141414;
-  --color-topbar-bg: rgba(14, 14, 14, 0.85);
-
-  --map-style: dark-v11;
-}
-
-/* Dark mode system preference fallback handled by JS initTheme() */
 
 /* ===== ANIMATIONS ===== */
 @keyframes spin {

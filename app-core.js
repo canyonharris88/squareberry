@@ -240,28 +240,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 // ==================== THEME ====================
 
 function initTheme() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const forceTheme = urlParams.get('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  currentTheme = forceTheme || (prefersDark ? 'dark' : 'light');
-  document.documentElement.setAttribute('data-theme', currentTheme);
-  updateThemeIcon();
-
-  document.querySelector('[data-theme-toggle]').addEventListener('click', () => {
-    currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    updateThemeIcon();
-    updateMapStyle();
-  });
-}
-
-function updateThemeIcon() {
-  const btn = document.querySelector('[data-theme-toggle]');
-  if (!btn) return;
-  btn.innerHTML = currentTheme === 'dark'
-    ? '<i data-lucide="sun" width="18" height="18"></i>'
-    : '<i data-lucide="moon" width="18" height="18"></i>';
-  lucide.createIcons({ nodes: [btn] });
+  // App is light mode only
+  currentTheme = 'light';
+  document.documentElement.setAttribute('data-theme', 'light');
 }
 
 
@@ -459,7 +440,7 @@ function initMap() {
   }
 
   try {
-    const baseStyle = currentTheme === 'dark' ? 'dark-v11' : 'streets-v12';
+    const baseStyle = 'streets-v12';
     map = new mapboxgl.Map({
       container: 'map',
       style: `mapbox://styles/mapbox/${baseStyle}`,
@@ -489,7 +470,7 @@ function updateMapStyle() {
   const satActive = document.querySelector('.layer-toggle[data-layer="satellite"]')?.classList.contains('active');
   let style = satActive
     ? 'mapbox://styles/mapbox/satellite-streets-v12'
-    : `mapbox://styles/mapbox/${currentTheme === 'dark' ? 'dark-v11' : 'streets-v12'}`;
+    : 'mapbox://styles/mapbox/streets-v12';
 
   map.setStyle(style);
   map.once('style.load', () => {
@@ -532,7 +513,7 @@ function addRegridLayer() {
     'source-layer': 'parcels',
     minzoom: 12,
     paint: {
-      'fill-color': currentTheme === 'dark' ? 'rgba(214,72,72,0.04)' : 'rgba(192,48,48,0.03)',
+      'fill-color': 'rgba(192,48,48,0.03)',
       'fill-opacity': 1
     }
   });
@@ -548,7 +529,7 @@ function addRegridLayer() {
       'visibility': document.querySelector('.layer-toggle[data-layer="parcels"]')?.classList.contains('active') ? 'visible' : 'none'
     },
     paint: {
-      'line-color': currentTheme === 'dark' ? '#D4A843' : '#C03030',
+      'line-color': '#C03030',
       'line-width': ['interpolate', ['linear'], ['zoom'], 12, 0.4, 14, 0.8, 16, 1.2],
       'line-opacity': ['interpolate', ['linear'], ['zoom'], 12, 0.3, 14, 0.5, 16, 0.7]
     }
@@ -562,7 +543,7 @@ function addRegridLayer() {
     'source-layer': 'parcels',
     minzoom: 12,
     paint: {
-      'line-color': currentTheme === 'dark' ? '#E0B84D' : '#D4A843',
+      'line-color': '#D4A843',
       'line-width': 2.5,
       'line-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0]
     }
@@ -837,10 +818,10 @@ async function selectParcel(id) {
       ['case', ['==', ['get', 'id'], id], 1, 0]);
     map.setPaintProperty('parcel-fill', 'fill-color',
       ['case', ['==', ['get', 'id'], id],
-        currentTheme === 'dark' ? 'rgba(214,72,72,0.2)' : 'rgba(192,48,48,0.12)',
+        'rgba(192,48,48,0.12)',
         ['!=', ['get', 'pipeline'], ''],
-        currentTheme === 'dark' ? 'rgba(77,168,99,0.1)' : 'rgba(43,94,58,0.08)',
-        currentTheme === 'dark' ? 'rgba(214,72,72,0.06)' : 'rgba(192,48,48,0.05)']);
+        'rgba(43,94,58,0.08)',
+        'rgba(192,48,48,0.05)']);
   }
 
   // Update header
@@ -902,8 +883,8 @@ async function selectParcel(id) {
       map.setPaintProperty('parcel-fill', 'fill-color',
         ['case',
           ['!=', ['get', 'pipeline'], ''],
-          currentTheme === 'dark' ? 'rgba(77,168,99,0.1)' : 'rgba(43,94,58,0.08)',
-          currentTheme === 'dark' ? 'rgba(214,72,72,0.06)' : 'rgba(192,48,48,0.05)']);
+          'rgba(43,94,58,0.08)',
+          'rgba(192,48,48,0.05)']);
     }
   };
 

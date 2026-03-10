@@ -297,16 +297,6 @@ function renderProfile() {
 
       <div class="settings-pane active" id="pane-account">
         <div class="settings-section">
-          <div class="settings-section-title">Appearance</div>
-          <div class="form-group" style="display:flex;align-items:center;justify-content:space-between;max-width:400px;">
-            <div>
-              <span style="font-size:var(--text-xs);color:var(--color-text);font-weight:500;">Dark Mode</span>
-              <div style="font-size:11px;color:var(--color-text-muted);margin-top:2px;">Switch between light and dark themes</div>
-            </div>
-            <label class="toggle-switch"><input type="checkbox" id="settDarkMode" ${(typeof currentTheme !== 'undefined' && currentTheme === 'dark') ? 'checked' : ''} onchange="toggleDarkModeFromSettings(this.checked)"><span class="toggle-track"></span></label>
-          </div>
-        </div>
-        <div class="settings-section" style="margin-top: var(--space-5);">
           <div class="settings-section-title">Account Information</div>
           <div class="form-group">
             <label class="form-label">Full Name</label>
@@ -1806,9 +1796,4 @@ window.saveScoutSearch = saveScoutSearch;
 window.saveScoutDeal = saveScoutDeal;
 window.saveScoutEmail = saveScoutEmail;
 window.scoutGenerateReport = scoutGenerateReport;
-window.toggleDarkModeFromSettings = function(isDark) {
-  currentTheme = isDark ? 'dark' : 'light';
-  document.documentElement.setAttribute('data-theme', currentTheme);
-  updateThemeIcon();
-  if (map) updateMapStyle();
-};
+
