@@ -295,9 +295,6 @@ function switchView(view) {
   const stats = document.getElementById('mapStats');
   if (stats) stats.style.display = view === 'map' ? 'flex' : 'none';
 
-  // Show demo banner only on map view
-  const demoBanner = document.getElementById('demoBanner');
-  if (demoBanner) demoBanner.style.display = view === 'map' ? 'flex' : 'none';
 
   // Lazy-init map only when map view is first accessed
   if (view === 'map') {
@@ -475,7 +472,6 @@ function initMap() {
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right');
 
     map.on('load', () => {
-      addParcelLayer();
       addRegridLayer();
       lucide.createIcons();
     });
@@ -497,110 +493,10 @@ function updateMapStyle() {
 
   map.setStyle(style);
   map.once('style.load', () => {
-    addParcelLayer();
     addRegridLayer();
-    // Re-add demo county boundaries after style change
-    addMichiganCountyGeoJSON();
   });
 }
 
-function addParcelLayer() {
-  // Clean up any leftover layers from previous sessions
-  ['parcel-fill', 'parcel-border', 'parcel-border-hover', 'parcel-border-selected',
-   'parcel-points', 'parcel-cluster-circles', 'parcel-cluster-count'].forEach(l => {
-    if (map.getLayer(l)) map.removeLayer(l);
-  });
-  if (map.getSource('parcels')) map.removeSource('parcels');
-  if (map.getSource('parcel-points')) map.removeSource('parcel-points');
-
-  // ── DEMO MODE: Census TIGER county boundaries for Michigan ──
-  // Uses free US Census Bureau TIGER line boundaries to show
-  // Michigan county outlines as lightweight demo data.
-  addDemoCountyBoundaries();
-}
-
-function addDemoCountyBoundaries() {
-  if (!map) return;
-
-  // Clean up existing demo layers
-  ['demo-county-fill', 'demo-county-line', 'demo-county-labels'].forEach(l => {
-    if (map.getLayer(l)) map.removeLayer(l);
-  });
-  if (map.getSource('demo-counties')) map.removeSource('demo-counties');
-
-  // Census TIGER WMS — Michigan county boundaries (FIPS 26)
-  // This is free public data, no API key needed.
-  map.addSource('demo-counties', {
-    type: 'vector',
-    tiles: [
-      'https://tiles.arcgis.com/tiles/VTyQ9soqVukalItT/arcgis/rest/services/Administrative_Boundaries_US_Counties_Generalized/VectorTileServer/tile/{z}/{y}/{x}.pbf'
-    ],
-    minzoom: 4,
-    maxzoom: 12
-  });
-
-  // If the ArcGIS tiles don't work, fall back to a simple GeoJSON of MI counties
-  // We'll use a lightweight Michigan-only approach with a GeoJSON source
-  try {
-    addMichiganCountyGeoJSON();
-  } catch (e) {
-    console.log('Demo county boundaries: using basic outline');
-  }
-}
-
-function addMichiganCountyGeoJSON() {
-  // Remove demo-counties source if it was added above and didn't work
-  ['demo-county-fill', 'demo-county-line'].forEach(l => {
-    if (map.getLayer(l)) map.removeLayer(l);
-  });
-  if (map.getSource('demo-counties')) map.removeSource('demo-counties');
-
-  // Use the US Census Bureau's cartographic boundary GeoJSON endpoint
-  // This is 100% free/public and returns county polygons
-  const tigerUrl = 'https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json';
-
-  fetch(tigerUrl)
-    .then(r => r.json())
-    .then(geojson => {
-      // Filter to Michigan counties only (FIPS prefix "26")
-      const michiganCounties = {
-        type: 'FeatureCollection',
-        features: geojson.features.filter(f => f.id && f.id.startsWith('26'))
-      };
-
-      if (!map || !map.loaded()) return;
-      if (map.getSource('mi-counties')) return;
-
-      map.addSource('mi-counties', {
-        type: 'geojson',
-        data: michiganCounties
-      });
-
-      map.addLayer({
-        id: 'mi-county-fill',
-        type: 'fill',
-        source: 'mi-counties',
-        paint: {
-          'fill-color': currentTheme === 'dark' ? 'rgba(212,168,67,0.06)' : 'rgba(43,94,58,0.04)',
-          'fill-opacity': 0.8
-        }
-      });
-
-      map.addLayer({
-        id: 'mi-county-line',
-        type: 'line',
-        source: 'mi-counties',
-        paint: {
-          'line-color': currentTheme === 'dark' ? '#D4A843' : '#2B5E3A',
-          'line-width': ['interpolate', ['linear'], ['zoom'], 4, 0.5, 8, 1.2, 12, 1.8],
-          'line-opacity': 0.5
-        }
-      });
-    })
-    .catch(err => {
-      console.log('Could not load demo county boundaries:', err.message);
-    });
-}
 
 function addRegridLayer() {
   // ──────────────────────────────────────────────────────

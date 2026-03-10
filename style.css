@@ -2383,22 +2383,6 @@
   line-height: 1.6;
 }
 
-/* ===== DEMO BANNER ===== */
-.demo-banner {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
-  background: color-mix(in oklch, var(--color-gold, #D4A843) 10%, var(--color-surface));
-  border-bottom: 1px solid color-mix(in oklch, var(--color-gold, #D4A843) 25%, transparent);
-  font-size: var(--text-xs);
-  font-weight: 500;
-  color: var(--color-gold, #D4A843);
-  flex-shrink: 0;
-}
-.demo-banner i, .demo-banner svg {
-  flex-shrink: 0;
-}
 
 /* ===== SCOUT AGENT ===== */
 .scout-container {
