@@ -199,7 +199,6 @@ async function saveSettingsToApi(settingsObj) {
 
 document.addEventListener('DOMContentLoaded', async () => {
   initTheme();
-  initRouter();
   initSidebar();
 
   // ──────────────────────────────────────────────────────
@@ -208,6 +207,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   //   NEXT_PUBLIC_MAPBOX_TOKEN = your Mapbox public token (pk.ey...)
   //   REGRID_API_KEY           = your Regrid API key
   // The /api/config endpoint reads them from os.environ and serves them here.
+  // Must happen BEFORE initRouter() so tokens are available when map view loads.
   // ──────────────────────────────────────────────────────
   try {
     const cfg = await fetch('/api/config').then(r => r.json());
@@ -219,6 +219,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.REGRID_TOKEN = '';
   }
 
+  initRouter();
   initSearch();
   // Fetch all data from API in parallel
   await Promise.all([
