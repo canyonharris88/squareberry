@@ -940,7 +940,23 @@ function renderPipeline() {
     </div>
   ` : '';
 
-  board.innerHTML = columnsHtml;
+  // Mobile stage tabs — render a tab bar so stages are visible without side-scroll
+  const activeStageId = window._activePipelineStage || PIPELINE_STAGES[0].id;
+  const stageTabsHtml = `
+    <div class="pipeline-stage-tabs" id="pipelineStageTabs">
+      ${PIPELINE_STAGES.map(stage => {
+        const apiCards = visibleApiLeads.filter(l => l.stage === stage.id);
+        const parcelCards = PARCELS.filter(p => p.pipeline === stage.id && !archivedParcels.includes(p.id));
+        const count = apiCards.length + parcelCards.length;
+        return `<button class="pipeline-stage-tab ${stage.id === activeStageId ? 'active' : ''}" data-stage-id="${escapeHtml(stage.id)}" onclick="switchPipelineStage('${escapeHtml(stage.id)}')">${escapeHtml(stage.label)}<span class="pipeline-stage-tab-count">${count}</span></button>`;
+      }).join('')}
+    </div>
+  `;
+
+  board.innerHTML = stageTabsHtml + columnsHtml;
+
+  // Apply active stage visibility on mobile
+  applyPipelineStageVisibility(activeStageId);
 
   // Add archive toggle after the board
   const existingToggle = document.querySelector('.pipeline-archive-toggle');
@@ -1796,4 +1812,28 @@ window.saveScoutSearch = saveScoutSearch;
 window.saveScoutDeal = saveScoutDeal;
 window.saveScoutEmail = saveScoutEmail;
 window.scoutGenerateReport = scoutGenerateReport;
+window.switchPipelineStage = switchPipelineStage;
+
+// ==================== MOBILE PIPELINE STAGE TABS ====================
+
+function switchPipelineStage(stageId) {
+  window._activePipelineStage = stageId;
+  // Update tab active states
+  document.querySelectorAll('.pipeline-stage-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.stageId === stageId);
+  });
+  applyPipelineStageVisibility(stageId);
+}
+
+function applyPipelineStageVisibility(stageId) {
+  // On mobile: show only the column whose data-stage matches
+  // On desktop: CSS keeps all columns visible regardless
+  const columns = document.querySelectorAll('.kanban-column');
+  columns.forEach((col, i) => {
+    const cardsDiv = col.querySelector('.kanban-cards');
+    const colStage = cardsDiv ? cardsDiv.dataset.stage : PIPELINE_STAGES[i]?.id;
+    col.setAttribute('data-stage-id', colStage || '');
+    col.classList.toggle('pipeline-stage-hidden', colStage !== stageId);
+  });
+}
 

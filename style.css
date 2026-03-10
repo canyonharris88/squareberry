@@ -1120,6 +1120,62 @@
   margin-top: var(--space-1);
 }
 
+/* ===== PIPELINE STAGE TABS (mobile only) ===== */
+.pipeline-stage-tabs {
+  display: none; /* Hidden on desktop — shown via media query */
+  gap: 6px;
+  padding: 0 0 var(--space-3) 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  flex-shrink: 0;
+}
+.pipeline-stage-tabs::-webkit-scrollbar { display: none; }
+
+.pipeline-stage-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 150ms ease;
+  font-family: inherit;
+}
+.pipeline-stage-tab:hover {
+  border-color: var(--color-text-muted);
+}
+.pipeline-stage-tab.active {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  border-color: var(--color-primary);
+}
+.pipeline-stage-tab-count {
+  font-size: 10px;
+  font-weight: 600;
+  min-width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: rgba(0,0,0,0.08);
+}
+.pipeline-stage-tab.active .pipeline-stage-tab-count {
+  background: rgba(255,255,255,0.25);
+}
+
+/* Desktop: always show all columns, ignore hidden class */
+.kanban-column.pipeline-stage-hidden {
+  display: flex; /* Override on desktop — CSS media query hides on mobile */
+}
+
 /* ===== KANBAN BOARD ===== */
 .kanban-board {
   display: flex;
@@ -2045,14 +2101,21 @@
     padding: 6px 12px;
   }
 
-  /* Kanban horizontal scroll */
+  /* Pipeline mobile: stage tabs + single column view */
   .kanban-board {
-    scroll-snap-type: x proximity;
-    -webkit-overflow-scrolling: touch;
+    flex-direction: column;
+    overflow-x: visible;
   }
   .kanban-column {
-    scroll-snap-align: start;
-    min-width: 250px;
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+  }
+  .kanban-column.pipeline-stage-hidden {
+    display: none;
+  }
+  .pipeline-stage-tabs {
+    display: flex;
   }
 
   /* Bottom nav safe area */
