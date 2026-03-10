@@ -2101,10 +2101,16 @@
     padding: 6px 12px;
   }
 
-  /* Pipeline mobile: stage tabs + single column view */
+  /* Pipeline mobile: enable vertical scroll, stage tabs + single column */
+  #view-pipeline {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   .kanban-board {
     flex-direction: column;
     overflow-x: visible;
+    overflow-y: visible;
+    flex: none;
   }
   .kanban-column {
     min-width: 0;
