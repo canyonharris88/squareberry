@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://api.mapbox.com https://unpkg.com https://events.mapbox.com; style-src 'self' 'unsafe-inline' https://api.mapbox.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src * blob: data:; connect-src * blob: data:; worker-src blob:; child-src blob:;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://api.mapbox.com https://unpkg.com https://events.mapbox.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://api.mapbox.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src * blob: data:; connect-src * blob: data:; worker-src blob:; child-src blob:;">
   <meta name="theme-color" content="#C03030">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -232,6 +232,7 @@
   <!-- Mobile sidebar overlay -->
   <div class="mobile-sidebar-overlay" id="mobileSidebarOverlay"></div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
   <script src="./app-core.js"></script>
   <script src="./app-features.js"></script>
 </body>
