@@ -30,11 +30,9 @@ const PARCELS = [];
 
 const PIPELINE_STAGES = [
   { id: "new_lead", label: "New Lead" },
-  { id: "lead", label: "Lead" },
   { id: "researching", label: "Researching" },
-  { id: "under-contract", label: "Under Contract" },
-  { id: "due-diligence", label: "Due Diligence" },
-  { id: "closed", label: "Closed" }
+  { id: "closed", label: "Closed" },
+  { id: "passed", label: "Passed" }
 ];
 
 // ==================== PIPELINE API ====================
