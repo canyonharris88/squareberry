@@ -271,7 +271,7 @@ function switchView(view) {
 
   // Show layer toggles and map stats only on map view
   const lt = document.getElementById('layerToggles');
-  if (lt) lt.style.display = view === 'map' ? 'flex' : 'none';
+  if (lt) lt.classList.toggle('map-active', view === 'map');
 
   const stats = document.getElementById('mapStats');
   if (stats) stats.style.display = view === 'map' ? 'flex' : 'none';
