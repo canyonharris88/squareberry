@@ -228,7 +228,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   ]);
   renderScoutAgent();
   renderPipeline();
-  renderAlerts();
   renderReports();
   renderProfile();
   renderMapStats();
@@ -258,6 +257,8 @@ function initRouter() {
 }
 
 function switchView(view) {
+  // Alerts merged into Scout Agent
+  if (view === 'alerts') { view = 'scout'; window.location.hash = '#scout'; }
   currentView = view;
 
   document.querySelectorAll('.nav-item, .mobile-nav-item').forEach(el => {

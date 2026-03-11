@@ -162,7 +162,23 @@ function renderScoutAgent() {
 
 
     </div>
+
+    <!-- Active Scouts & Alerts -->
+    <div class="scout-section-divider"></div>
+    <div class="scout-section-header">
+      <i data-lucide="bell" width="20" height="20"></i>
+      <div>
+        <h2 class="scout-section-title">Active Scouts & Alerts</h2>
+        <p class="scout-section-subtitle">Your saved searches and match notifications</p>
+      </div>
+    </div>
+    <div class="alerts-list" id="alertsList">
+      <!-- Injected by renderAlerts() -->
+    </div>
   `;
+
+  // Render alerts inside the scout container
+  renderAlerts();
 
   // Scout margin slider listener
   const scoutSlider = document.getElementById('scoutMarginSlider');

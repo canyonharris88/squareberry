@@ -2513,6 +2513,34 @@
   padding: var(--space-4);
 }
 
+.scout-section-divider {
+  height: 1px;
+  background: var(--color-divider);
+  margin: var(--space-8) 0 var(--space-6) 0;
+}
+
+.scout-section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  color: var(--color-primary);
+}
+
+.scout-section-title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.scout-section-subtitle {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
 /* ===== PROFILE ===== */
 .profile-container {
   padding: var(--space-5) var(--space-6);
