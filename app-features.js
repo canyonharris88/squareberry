@@ -160,31 +160,7 @@ function renderScoutAgent() {
         </div>
       </div>
 
-      <!-- Quick Actions -->
-      <div class="scout-card scout-card--actions">
-        <div class="scout-card-header">
-          <i data-lucide="zap" width="18" height="18"></i>
-          <h2 class="scout-card-title">Quick Actions</h2>
-        </div>
-        <div class="scout-card-body">
-          <button class="btn btn-secondary scout-action-btn" onclick="window.location.hash='#map'">
-            <i data-lucide="map-pin" width="16" height="16"></i>
-            View on Map
-          </button>
-          <button class="btn btn-secondary scout-action-btn" onclick="scoutGenerateReport()">
-            <i data-lucide="file-text" width="16" height="16"></i>
-            Generate Report
-          </button>
-          <button class="btn btn-secondary scout-action-btn" onclick="window.location.hash='#pipeline'">
-            <i data-lucide="kanban" width="16" height="16"></i>
-            View Pipeline
-          </button>
-          <button class="btn btn-secondary scout-action-btn" onclick="window.location.hash='#alerts'">
-            <i data-lucide="bell" width="16" height="16"></i>
-            Manage Alerts
-          </button>
-        </div>
-      </div>
+
     </div>
   `;
 

@@ -2513,28 +2513,6 @@
   padding: var(--space-4);
 }
 
-.scout-card--actions .scout-card-body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.scout-action-btn {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  justify-content: flex-start;
-  width: 100%;
-  padding: var(--space-3) var(--space-4);
-  text-align: left;
-  font-size: var(--text-xs);
-  border-radius: var(--radius-lg);
-}
-
-.scout-action-btn i, .scout-action-btn svg {
-  flex-shrink: 0;
-}
-
 /* ===== PROFILE ===== */
 .profile-container {
   padding: var(--space-5) var(--space-6);
@@ -2643,18 +2621,4 @@
     gap: var(--space-5);
   }
 
-  .scout-card--actions {
-    grid-column: 1 / -1;
-  }
-
-  .scout-card--actions .scout-card-body {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-  }
-
-  .scout-card--actions .scout-action-btn {
-    flex: 1 1 calc(25% - var(--space-3));
-    min-width: 180px;
-  }
 }
