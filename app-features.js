@@ -1264,6 +1264,9 @@ function openLeadDetail(id, type) {
           <button class="btn btn-lead-action" onclick="openGrossProfitCalc(${id}, '${type}')">
             <i data-lucide="percent" width="16" height="16"></i> Gross Profit %
           </button>
+          <button class="btn btn-lead-action" onclick="viewLeadOnMap(${id}, '${type}')">
+            <i data-lucide="map-pin" width="16" height="16"></i> View on Map
+          </button>
         </div>
       </div>
     </div>
@@ -1354,6 +1357,58 @@ function generatePdfAnalysis(id, type) {
 
 function openGrossProfitCalc(id, type) {
   showToast('Coming Soon', 'Gross Profit calculator will be available soon.');
+}
+
+function viewLeadOnMap(id, type) {
+  closeLeadDetail();
+
+  // For PARCELS with coords, fly directly
+  if (type === 'parcel') {
+    const p = PARCELS.find(p => p.id === id);
+    if (p && p.coords) {
+      window.location.hash = '#map';
+      setTimeout(() => {
+        if (typeof map !== 'undefined' && map) {
+          map.flyTo({ center: p.coords, zoom: 15, duration: 1200 });
+        }
+      }, 300);
+      return;
+    }
+  }
+
+  // For API leads, geocode the address via Mapbox then fly there
+  const lead = apiLeads.find(l => l.id === id);
+  if (!lead) return;
+
+  const query = encodeURIComponent(
+    [lead.address, lead.city, lead.county, lead.state || 'MI'].filter(Boolean).join(', ')
+  );
+  const token = window.MAPBOX_TOKEN;
+
+  if (!token) {
+    showToast('Map Unavailable', 'Mapbox token not configured.');
+    return;
+  }
+
+  window.location.hash = '#map';
+
+  fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?access_token=${token}&limit=1`)
+    .then(r => r.json())
+    .then(data => {
+      if (data.features && data.features.length > 0) {
+        const [lng, lat] = data.features[0].center;
+        setTimeout(() => {
+          if (typeof map !== 'undefined' && map) {
+            map.flyTo({ center: [lng, lat], zoom: 15, duration: 1200 });
+          }
+        }, 300);
+      } else {
+        showToast('Location Not Found', 'Could not locate this address on the map.');
+      }
+    })
+    .catch(() => {
+      showToast('Geocoding Error', 'Could not look up the address location.');
+    });
 }
 
 // Click pipeline card to go to map
@@ -1858,6 +1913,7 @@ window.saveLeadNotes = saveLeadNotes;
 window.openAddNotes = openAddNotes;
 window.generatePdfAnalysis = generatePdfAnalysis;
 window.openGrossProfitCalc = openGrossProfitCalc;
+window.viewLeadOnMap = viewLeadOnMap;
 window.sendChatQuestion = sendChatQuestion;
 window.saveSearchSettings = saveSearchSettings;
 window.saveDealSettings = saveDealSettings;
