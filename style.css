@@ -1644,7 +1644,7 @@
     display: flex;
     justify-content: space-around;
   }
-  .mobile-menu-btn { display: flex; }
+  .mobile-menu-btn { display: none; }
   .topbar-center { display: none; }
 
   .main-area { padding-bottom: 64px; }
