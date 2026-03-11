@@ -157,11 +157,12 @@
 
 .logo-text {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: var(--text-sm);
+  font-weight: 800;
+  font-size: var(--text-xl);
   color: var(--color-text);
   white-space: nowrap;
   transition: opacity var(--transition-fast);
+  letter-spacing: -0.02em;
 }
 
 .sidebar-collapse-btn {
