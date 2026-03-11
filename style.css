@@ -2648,6 +2648,24 @@
   .scout-grid {
     grid-template-columns: 1fr 1fr;
     gap: var(--space-6);
+    align-items: start;
   }
 
+  /* Email & Alerts card spans full width on desktop */
+  .scout-grid > .scout-card:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+
+  /* Two-column form layout inside the full-width Email card */
+  .scout-grid > .scout-card:nth-child(3) .scout-card-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4) var(--space-8);
+  }
+
+  /* Save button spans full width inside the Email card grid */
+  .scout-grid > .scout-card:nth-child(3) .scout-card-body > .btn {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
 }
