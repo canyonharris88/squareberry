@@ -1254,17 +1254,16 @@ function openLeadDetail(id, type) {
         </button>
       </div>
       <div class="modal-body">
-        <div class="lead-detail-section">
-          <label class="form-label">Notes</label>
-          <textarea class="form-input lead-notes-textarea" id="leadNotesInput" placeholder="Add notes about this lead...">${escapeHtml(notes)}</textarea>
-        </div>
         <div class="lead-detail-actions">
-          <button class="btn btn-primary btn-sm" onclick="saveLeadNotes()">
-            <i data-lucide="save" width="14" height="14"></i> Save Notes
+          <button class="btn btn-lead-action" onclick="openAddNotes(${id}, '${type}')">
+            <i data-lucide="notebook-pen" width="16" height="16"></i> Add Notes
           </button>
-          ${type === 'parcel' ? `<button class="btn btn-secondary btn-sm" onclick="closeLeadDetail(); goToParcelFromPipeline(${id})">
-            <i data-lucide="map-pin" width="14" height="14"></i> View on Map
-          </button>` : ''}
+          <button class="btn btn-lead-action" onclick="generatePdfAnalysis(${id}, '${type}')">
+            <i data-lucide="file-text" width="16" height="16"></i> Generate PDF Analysis
+          </button>
+          <button class="btn btn-lead-action" onclick="openGrossProfitCalc(${id}, '${type}')">
+            <i data-lucide="percent" width="16" height="16"></i> Gross Profit %
+          </button>
         </div>
       </div>
     </div>
@@ -1299,6 +1298,62 @@ function saveLeadNotes() {
 
   showToast('Notes Saved', 'Lead notes updated');
   closeLeadDetail();
+}
+
+// ===== LEAD DETAIL ACTION BUTTONS =====
+
+function openAddNotes(id, type) {
+  closeLeadDetail();
+  // Open a notes modal for this lead
+  let lead;
+  if (type === 'api') {
+    lead = apiLeads.find(l => l.id === id);
+  } else {
+    lead = PARCELS.find(p => p.id === id);
+  }
+  if (!lead) return;
+
+  const notes = type === 'api' ? (lead.notes || '') : (lead._notes || '');
+
+  let modal = document.getElementById('leadDetailModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'leadDetailModal';
+    modal.className = 'modal-overlay';
+    document.body.appendChild(modal);
+  }
+
+  openLeadDetailId = id;
+  openLeadDetailType = type;
+
+  modal.innerHTML = `
+    <div class="modal-content lead-detail-modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Notes</h3>
+        <button class="icon-btn" onclick="closeLeadDetail()">
+          <i data-lucide="x" width="18" height="18"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <textarea class="form-input lead-notes-textarea" id="leadNotesInput" placeholder="Add notes about this lead...">${escapeHtml(notes)}</textarea>
+        <div class="lead-detail-actions" style="margin-top:var(--space-3)">
+          <button class="btn btn-primary btn-sm" onclick="saveLeadNotes()">
+            <i data-lucide="save" width="14" height="14"></i> Save Notes
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+  modal.classList.add('visible');
+  lucide.createIcons({ nodes: [modal] });
+}
+
+function generatePdfAnalysis(id, type) {
+  showToast('Coming Soon', 'PDF Analysis generation will be available soon.');
+}
+
+function openGrossProfitCalc(id, type) {
+  showToast('Coming Soon', 'Gross Profit calculator will be available soon.');
 }
 
 // Click pipeline card to go to map
@@ -1800,6 +1855,9 @@ window.executeDeleteLead = executeDeleteLead;
 window.openLeadDetail = openLeadDetail;
 window.closeLeadDetail = closeLeadDetail;
 window.saveLeadNotes = saveLeadNotes;
+window.openAddNotes = openAddNotes;
+window.generatePdfAnalysis = generatePdfAnalysis;
+window.openGrossProfitCalc = openGrossProfitCalc;
 window.sendChatQuestion = sendChatQuestion;
 window.saveSearchSettings = saveSearchSettings;
 window.saveDealSettings = saveDealSettings;
