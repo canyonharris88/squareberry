@@ -552,7 +552,7 @@ async function generateReport() {
 <body>
   <div class="report-header">
     <div>
-      <div class="report-logo"><img src="./logo-sidebar.png" alt="" width="28">SB</div>
+      <div class="report-logo"><img src="./logo-sidebar.png" alt="" width="28">SquareBerry</div>
       <div style="font-size:12px; color:#6B6B65; margin-top:4px;">Land Intelligence Report</div>
     </div>
     <div class="report-meta">
