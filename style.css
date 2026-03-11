@@ -1305,9 +1305,7 @@
 
 /* ===== ALERTS ===== */
 .alerts-list {
-  padding: 0 var(--space-6);
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  padding: 0;
   flex: 1;
 }
 
@@ -2436,7 +2434,7 @@
 
 /* ===== SCOUT AGENT ===== */
 .scout-container {
-  padding: var(--space-5) var(--space-6);
+  padding: var(--space-6) var(--space-6) var(--space-16) var(--space-6);
   overflow-y: auto;
   overscroll-behavior: contain;
   flex: 1;
@@ -2483,7 +2481,7 @@
 .scout-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: var(--space-4);
+  gap: var(--space-5);
 }
 
 .scout-card {
@@ -2491,32 +2489,34 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
 
 .scout-card-header {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-4) var(--space-4) 0 var(--space-4);
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-5) 0 var(--space-5);
   color: var(--color-primary);
 }
 
 .scout-card-title {
   font-family: var(--font-display);
-  font-size: var(--text-sm);
-  font-weight: 600;
+  font-size: var(--text-base);
+  font-weight: 700;
   color: var(--color-text);
   margin: 0;
+  letter-spacing: -0.01em;
 }
 
 .scout-card-body {
-  padding: var(--space-4);
+  padding: var(--space-5);
 }
 
 .scout-section-divider {
   height: 1px;
   background: var(--color-divider);
-  margin: var(--space-8) 0 var(--space-6) 0;
+  margin: var(--space-10) 0 var(--space-6) 0;
 }
 
 .scout-section-header {
@@ -2529,10 +2529,11 @@
 
 .scout-section-title {
   font-family: var(--font-display);
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   font-weight: 700;
   color: var(--color-text);
   margin: 0;
+  letter-spacing: -0.01em;
 }
 
 .scout-section-subtitle {
@@ -2637,7 +2638,7 @@
 @media (min-width: 1100px) {
   .scout-container {
     max-width: 1120px;
-    padding: var(--space-6) var(--space-8);
+    padding: var(--space-8) var(--space-8) var(--space-16) var(--space-8);
   }
 
   .scout-header {
@@ -2646,7 +2647,7 @@
 
   .scout-grid {
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-5);
+    gap: var(--space-6);
   }
 
 }
