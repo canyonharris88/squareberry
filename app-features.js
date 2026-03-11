@@ -34,146 +34,158 @@ function renderScoutAgent() {
       </div>
     </div>
 
-    <div class="scout-grid">
-      <!-- Search Section -->
-      <div class="scout-card">
-        <div class="scout-card-header">
-          <i data-lucide="search" width="18" height="18"></i>
-          <h2 class="scout-card-title">Search Criteria</h2>
+    <!-- Active Scouts (top) -->
+    <div class="scout-active-section">
+      <div class="scout-active-header">
+        <div class="scout-active-header-left">
+          <h2 class="scout-section-title">Active Scouts</h2>
+          <p class="scout-section-subtitle">Your saved searches and match notifications</p>
         </div>
-        <div class="scout-card-body">
-          <div class="form-group">
-            <label class="form-label">Target Areas</label>
-            <input class="form-input" type="text" id="scoutTargetAreas" value="${escapeHtml(s.targetAreas)}" placeholder="e.g. Livingston County, Washtenaw County">
-          </div>
-          <div class="form-row" style="gap: var(--space-3);">
-            <div class="form-group" style="flex:1;">
-              <label class="form-label">Min Acreage</label>
-              <input class="form-input" type="number" id="scoutMinAcreage" value="${s.minAcreage}" style="max-width:100%;">
-            </div>
-            <div class="form-group" style="flex:1;">
-              <label class="form-label">Max Acreage</label>
-              <input class="form-input" type="number" id="scoutMaxAcreage" value="${s.maxAcreage}" style="max-width:100%;">
-            </div>
-          </div>
-          <div class="form-row" style="gap: var(--space-3);">
-            <div class="form-group" style="flex:1;">
-              <label class="form-label">Min Price</label>
-              <input class="form-input" type="text" id="scoutMinPrice" value="${fmtInput(s.minPrice)}" style="max-width:100%;">
-            </div>
-            <div class="form-group" style="flex:1;">
-              <label class="form-label">Max Price</label>
-              <input class="form-input" type="text" id="scoutMaxPrice" value="${fmtInput(s.maxPrice)}" style="max-width:100%;">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Zoning Types</label>
-            <div class="checkbox-group">
-              <label class="checkbox-label"><input type="checkbox" data-scout-zoning="R-1" ${s.zoningTypes.includes('R-1') ? 'checked' : ''}> R-1 Single Family</label>
-              <label class="checkbox-label"><input type="checkbox" data-scout-zoning="R-2" ${s.zoningTypes.includes('R-2') ? 'checked' : ''}> R-2 Two-Family</label>
-              <label class="checkbox-label"><input type="checkbox" data-scout-zoning="PUD" ${s.zoningTypes.includes('PUD') ? 'checked' : ''}> PUD Planned Unit Dev</label>
-              <label class="checkbox-label"><input type="checkbox" data-scout-zoning="AG" ${s.zoningTypes.includes('AG') ? 'checked' : ''}> Agricultural</label>
-            </div>
-          </div>
-          <button class="btn btn-primary btn-sm" onclick="saveScoutSearch()">
-            <i data-lucide="save" width="14" height="14"></i> Save Search
-          </button>
-        </div>
+        <button class="btn btn-primary btn-sm scout-new-btn" onclick="toggleNewScoutPanel()" id="newScoutBtn">
+          <i data-lucide="plus" width="16" height="16"></i> New Scout
+        </button>
       </div>
 
-      <!-- Deal Criteria -->
-      <div class="scout-card">
-        <div class="scout-card-header">
-          <i data-lucide="calculator" width="18" height="18"></i>
-          <h2 class="scout-card-title">Deal Criteria</h2>
-        </div>
-        <div class="scout-card-body">
-          <div class="form-group">
-            <label class="form-label">Target Gross Profit</label>
-            <div style="display:flex;align-items:center;gap:var(--space-3);">
-              <input type="range" class="profit-slider" min="1" max="100" value="${s.defaultMargin}" id="scoutMarginSlider" style="flex:1;background:linear-gradient(to right, ${sliderColor} ${marginPct}%, var(--color-surface-offset) ${marginPct}%);">
-              <span style="font-size:var(--text-sm);font-weight:600;min-width:36px;" id="scoutMarginDisplay">${s.defaultMargin}%</span>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Contingency %</label>
-            <input class="form-input" type="number" id="scoutContingency" value="${s.contingencyPct}" style="max-width:120px;">
-          </div>
-          <div class="form-row" style="gap: var(--space-3);">
-            <div class="form-group" style="flex:1;">
-              <label class="form-label">Holding Rate (%/yr)</label>
-              <input class="form-input" type="number" id="scoutHoldingRate" value="${s.holdingCostRate}" style="max-width:100%;">
-            </div>
-            <div class="form-group" style="flex:1;">
-              <label class="form-label">Holding Period (mo)</label>
-              <input class="form-input" type="number" id="scoutHoldingPeriod" value="${s.holdingPeriodMonths}" style="max-width:100%;">
-            </div>
-          </div>
-          <button class="btn btn-primary btn-sm" onclick="saveScoutDeal()">
-            <i data-lucide="save" width="14" height="14"></i> Save Deal Criteria
-          </button>
-        </div>
-      </div>
-
-      <!-- Email & Alerts -->
-      <div class="scout-card">
-        <div class="scout-card-header">
-          <i data-lucide="mail" width="18" height="18"></i>
-          <h2 class="scout-card-title">Email & Alerts</h2>
-        </div>
-        <div class="scout-card-body">
-          <div class="form-group">
-            <label class="form-label">Email Address</label>
-            <input class="form-input" type="email" id="scoutEmail" value="${escapeHtml(s.emailAddress)}">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Daily Leads Count</label>
-            <select class="form-input" id="scoutDailyLeads" style="max-width:160px;">
-              <option ${s.dailyLeadsCount === 3 ? 'selected' : ''}>3</option>
-              <option ${s.dailyLeadsCount === 5 ? 'selected' : ''}>5</option>
-              <option ${s.dailyLeadsCount === 10 ? 'selected' : ''}>10</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Delivery Time</label>
-            <input class="form-input" type="time" id="scoutDeliveryTime" value="${escapeHtml(s.deliveryTime)}" style="max-width:160px;">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Notification Frequency</label>
-            <select class="form-input" id="scoutNotifFreq" style="max-width:200px;">
-              <option ${s.notificationFrequency === 'realtime' ? 'selected' : ''} value="realtime">Real-time</option>
-              <option ${s.notificationFrequency === 'hourly' ? 'selected' : ''} value="hourly">Hourly digest</option>
-              <option ${s.notificationFrequency === 'daily' ? 'selected' : ''} value="daily">Daily digest</option>
-            </select>
-          </div>
-          <div class="form-group" style="display:flex;align-items:center;justify-content:space-between;">
-            <span style="font-size:var(--text-xs);color:var(--color-text);">Email alerts</span>
-            <label class="toggle-switch"><input type="checkbox" id="scoutEmailAlerts" ${s.emailAlertsOn ? 'checked' : ''}><span class="toggle-track"></span></label>
-          </div>
-          <div class="form-group" style="display:flex;align-items:center;justify-content:space-between;">
-            <span style="font-size:var(--text-xs);color:var(--color-text);">Daily briefing email</span>
-            <label class="toggle-switch"><input type="checkbox" id="scoutDailyBriefing" ${s.dailyBriefingOn ? 'checked' : ''}><span class="toggle-track"></span></label>
-          </div>
-          <button class="btn btn-primary btn-sm" onclick="saveScoutEmail()">
-            <i data-lucide="save" width="14" height="14"></i> Save Email Settings
-          </button>
-        </div>
-      </div>
-
-
-    </div>
-
-    <!-- Active Scouts & Alerts -->
-    <div class="scout-section-divider"></div>
-    <div class="scout-section-header">
-      <i data-lucide="bell" width="20" height="20"></i>
-      <div>
-        <h2 class="scout-section-title">Active Scouts & Alerts</h2>
-        <p class="scout-section-subtitle">Your saved searches and match notifications</p>
+      <div class="alerts-list" id="alertsList">
+        <!-- Injected by renderAlerts() -->
       </div>
     </div>
-    <div class="alerts-list" id="alertsList">
-      <!-- Injected by renderAlerts() -->
+
+    <!-- New Scout Panel (collapsed by default) -->
+    <div class="scout-new-panel" id="scoutNewPanel">
+      <div class="scout-new-panel-header">
+        <h2 class="scout-new-panel-title">Configure New Scout</h2>
+        <button class="btn btn-ghost btn-sm" onclick="toggleNewScoutPanel()">
+          <i data-lucide="x" width="16" height="16"></i> Close
+        </button>
+      </div>
+
+      <div class="scout-grid">
+        <!-- Search Section -->
+        <div class="scout-card">
+          <div class="scout-card-header">
+            <i data-lucide="search" width="18" height="18"></i>
+            <h2 class="scout-card-title">Search Criteria</h2>
+          </div>
+          <div class="scout-card-body">
+            <div class="form-group">
+              <label class="form-label">Target Areas</label>
+              <input class="form-input" type="text" id="scoutTargetAreas" value="${escapeHtml(s.targetAreas)}" placeholder="e.g. Livingston County, Washtenaw County">
+            </div>
+            <div class="form-row" style="gap: var(--space-3);">
+              <div class="form-group" style="flex:1;">
+                <label class="form-label">Min Acreage</label>
+                <input class="form-input" type="number" id="scoutMinAcreage" value="${s.minAcreage}" style="max-width:100%;">
+              </div>
+              <div class="form-group" style="flex:1;">
+                <label class="form-label">Max Acreage</label>
+                <input class="form-input" type="number" id="scoutMaxAcreage" value="${s.maxAcreage}" style="max-width:100%;">
+              </div>
+            </div>
+            <div class="form-row" style="gap: var(--space-3);">
+              <div class="form-group" style="flex:1;">
+                <label class="form-label">Min Price</label>
+                <input class="form-input" type="text" id="scoutMinPrice" value="${fmtInput(s.minPrice)}" style="max-width:100%;">
+              </div>
+              <div class="form-group" style="flex:1;">
+                <label class="form-label">Max Price</label>
+                <input class="form-input" type="text" id="scoutMaxPrice" value="${fmtInput(s.maxPrice)}" style="max-width:100%;">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Zoning Types</label>
+              <div class="checkbox-group">
+                <label class="checkbox-label"><input type="checkbox" data-scout-zoning="R-1" ${s.zoningTypes.includes('R-1') ? 'checked' : ''}> R-1 Single Family</label>
+                <label class="checkbox-label"><input type="checkbox" data-scout-zoning="R-2" ${s.zoningTypes.includes('R-2') ? 'checked' : ''}> R-2 Two-Family</label>
+                <label class="checkbox-label"><input type="checkbox" data-scout-zoning="PUD" ${s.zoningTypes.includes('PUD') ? 'checked' : ''}> PUD Planned Unit Dev</label>
+                <label class="checkbox-label"><input type="checkbox" data-scout-zoning="AG" ${s.zoningTypes.includes('AG') ? 'checked' : ''}> Agricultural</label>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="saveScoutSearch()">
+              <i data-lucide="save" width="14" height="14"></i> Save Search
+            </button>
+          </div>
+        </div>
+
+        <!-- Deal Criteria -->
+        <div class="scout-card">
+          <div class="scout-card-header">
+            <i data-lucide="calculator" width="18" height="18"></i>
+            <h2 class="scout-card-title">Deal Criteria</h2>
+          </div>
+          <div class="scout-card-body">
+            <div class="form-group">
+              <label class="form-label">Target Gross Profit</label>
+              <div style="display:flex;align-items:center;gap:var(--space-3);">
+                <input type="range" class="profit-slider" min="1" max="100" value="${s.defaultMargin}" id="scoutMarginSlider" style="flex:1;background:linear-gradient(to right, ${sliderColor} ${marginPct}%, var(--color-surface-offset) ${marginPct}%);">
+                <span style="font-size:var(--text-sm);font-weight:600;min-width:36px;" id="scoutMarginDisplay">${s.defaultMargin}%</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Contingency %</label>
+              <input class="form-input" type="number" id="scoutContingency" value="${s.contingencyPct}" style="max-width:120px;">
+            </div>
+            <div class="form-row" style="gap: var(--space-3);">
+              <div class="form-group" style="flex:1;">
+                <label class="form-label">Holding Rate (%/yr)</label>
+                <input class="form-input" type="number" id="scoutHoldingRate" value="${s.holdingCostRate}" style="max-width:100%;">
+              </div>
+              <div class="form-group" style="flex:1;">
+                <label class="form-label">Holding Period (mo)</label>
+                <input class="form-input" type="number" id="scoutHoldingPeriod" value="${s.holdingPeriodMonths}" style="max-width:100%;">
+              </div>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="saveScoutDeal()">
+              <i data-lucide="save" width="14" height="14"></i> Save Deal Criteria
+            </button>
+          </div>
+        </div>
+
+        <!-- Email & Alerts -->
+        <div class="scout-card">
+          <div class="scout-card-header">
+            <i data-lucide="mail" width="18" height="18"></i>
+            <h2 class="scout-card-title">Email & Alerts</h2>
+          </div>
+          <div class="scout-card-body">
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input class="form-input" type="email" id="scoutEmail" value="${escapeHtml(s.emailAddress)}">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Daily Leads Count</label>
+              <select class="form-input" id="scoutDailyLeads" style="max-width:160px;">
+                <option ${s.dailyLeadsCount === 3 ? 'selected' : ''}>3</option>
+                <option ${s.dailyLeadsCount === 5 ? 'selected' : ''}>5</option>
+                <option ${s.dailyLeadsCount === 10 ? 'selected' : ''}>10</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Delivery Time</label>
+              <input class="form-input" type="time" id="scoutDeliveryTime" value="${escapeHtml(s.deliveryTime)}" style="max-width:160px;">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Notification Frequency</label>
+              <select class="form-input" id="scoutNotifFreq" style="max-width:200px;">
+                <option ${s.notificationFrequency === 'realtime' ? 'selected' : ''} value="realtime">Real-time</option>
+                <option ${s.notificationFrequency === 'hourly' ? 'selected' : ''} value="hourly">Hourly digest</option>
+                <option ${s.notificationFrequency === 'daily' ? 'selected' : ''} value="daily">Daily digest</option>
+              </select>
+            </div>
+            <div class="form-group" style="display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-size:var(--text-xs);color:var(--color-text);">Email alerts</span>
+              <label class="toggle-switch"><input type="checkbox" id="scoutEmailAlerts" ${s.emailAlertsOn ? 'checked' : ''}><span class="toggle-track"></span></label>
+            </div>
+            <div class="form-group" style="display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-size:var(--text-xs);color:var(--color-text);">Daily briefing email</span>
+              <label class="toggle-switch"><input type="checkbox" id="scoutDailyBriefing" ${s.dailyBriefingOn ? 'checked' : ''}><span class="toggle-track"></span></label>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="saveScoutEmail()">
+              <i data-lucide="save" width="14" height="14"></i> Save Email Settings
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   `;
 
@@ -1851,6 +1863,19 @@ function toggleNewAlertForm() {
   if (form) form.classList.toggle('visible', showNewAlertForm);
 }
 
+function toggleNewScoutPanel() {
+  const panel = document.getElementById('scoutNewPanel');
+  const btn = document.getElementById('newScoutBtn');
+  if (!panel) return;
+  const isOpen = panel.classList.toggle('open');
+  if (btn) {
+    btn.innerHTML = isOpen
+      ? '<i data-lucide="x" width="16" height="16"></i> Close'
+      : '<i data-lucide="plus" width="16" height="16"></i> New Scout';
+    lucide.createIcons({ nodes: [btn] });
+  }
+}
+
 async function createNewAlert() {
   const county = sanitizeInput(document.getElementById('newAlertCounty')?.value, 100);
   const minAcres = parseFloat(document.getElementById('newAlertMinAcres')?.value) || null;
@@ -2151,6 +2176,7 @@ window.goToParcelFromPipeline = goToParcelFromPipeline;
 window.addToPipeline = addToPipeline;
 window.switchFeasibilityMode = switchFeasibilityMode;
 window.toggleNewAlertForm = toggleNewAlertForm;
+window.toggleNewScoutPanel = toggleNewScoutPanel;
 window.createNewAlert = createNewAlert;
 window.showToast = showToast;
 window.fitToParcels = fitToParcels;

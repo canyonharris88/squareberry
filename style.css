@@ -2542,6 +2542,66 @@
   margin-top: var(--space-1);
 }
 
+/* ===== ACTIVE SCOUTS SECTION ===== */
+.scout-active-section {
+  margin-bottom: var(--space-6);
+}
+
+.scout-active-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+  gap: var(--space-4);
+}
+
+.scout-active-header-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.scout-new-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+  font-weight: 600;
+}
+
+/* ===== NEW SCOUT PANEL (collapsed by default) ===== */
+.scout-new-panel {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 400ms cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 300ms cubic-bezier(0.16, 1, 0.3, 1),
+              margin 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  margin-bottom: 0;
+}
+
+.scout-new-panel.open {
+  max-height: 2000px;
+  opacity: 1;
+  margin-bottom: var(--space-6);
+}
+
+.scout-new-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.scout-new-panel-title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
 /* ===== PROFILE ===== */
 .profile-container {
   padding: var(--space-5) var(--space-6);
